@@ -137,7 +137,7 @@ body::after{
 body:not(.access-locked)::before{opacity:.85}
 body.access-locked::before{opacity:1}
 .app,#access-gate,footer.mobile{position:relative;z-index:1}
-.app{display:block;max-width:1320px;margin:0 auto;padding:18px 20px}
+.app,body:not(.access-locked) .app{display:block;max-width:1320px;margin:0 auto;padding:18px 20px}
 .main{max-width:none;background:transparent!important;padding:14px 6px 35px!important}
 #access-gate>div:first-child{color:#d4faff!important;text-shadow:0 3px 16px rgba(0,0,0,.65)}
 #access-gate #security{background:rgba(243,250,252,.87)!important;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 24px 65px rgba(0,0,0,.3)}
