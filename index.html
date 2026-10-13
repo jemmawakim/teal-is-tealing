@@ -9,11 +9,12 @@ const SESSION_KEY='teal-session-boundary-v1';
 let factorId=null,authRevision=0,activeSessionId=null,signingOut=false;
 const boundary=()=>{try {return JSON.parse(window.localStorage.getItem(SESSION_KEY)||'null');}catch{return null;}};
 function saveBoundary(value){try{if(value)window.localStorage.setItem(SESSION_KEY,JSON.stringify(value));else window.localStorage.removeItem(SESSION_KEY);}catch{}}
+function revokeBoundary(){saveBoundary({blocked:true,started:0,last:0});}
 function sessionExpired(b,now=Date.now()){return !b||!Number.isFinite(b.started)||!Number.isFinite(b.last)||now-b.last>IDLE_MS||now-b.started>ABSOLUTE_MS||b.last>now+60000||b.started>now+60000;}
 function lock(){authRevision++;document.body.classList.add('access-locked');}
 async function signOut(reason='Signed out.'){
  if(signingOut)return;
- signingOut=true;lock();saveBoundary(null);activeSessionId=null;
+ signingOut=true;lock();revokeBoundary();activeSessionId=null;
  $('teal-logout').hidden=true;$('login-fields').hidden=false;$('mfa-fields').hidden=true;
  $('auth-state').textContent='Signed out';$('api-result').textContent='No authenticated portfolio session.';
  message(reason);factorId=null;$('mfa-qr').replaceChildren();
@@ -51,11 +52,11 @@ async function refresh(){
  if(data.currentLevel==='aal2'){
    const now=Date.now(),existing=boundary();
    const identity=session.user?.id||'';
-   if(existing&&existing.user===identity&&sessionExpired(existing,now)){await signOut('Session expired. Sign in and verify 2FA again.');return;}
+   if(existing&&(existing.blocked||existing.user===identity&&sessionExpired(existing,now))){await signOut('Session expired. Sign in and verify 2FA again.');return;}
    $('auth-state').textContent='2FA verified';$('mfa-fields').hidden=true;message('Authenticated. Checking secured API.');
    try {const r=await fetch('https://teal-secure-api.vercel.app/api/overview',{headers:{Authorization:'Bearer '+session.access_token},cache:'no-store'}); const body=await r.json();if(revision!==authRevision||signingOut)return;if(r.ok && body.api_authenticated===true && body.mfa_verified===true && body.trading_enabled===false){
      const previous=boundary(),n=Date.now();
-     if(previous&&previous.user===identity&&sessionExpired(previous,n)){await signOut('Session expired. Sign in and verify 2FA again.');return;}
+     if(previous&&(previous.blocked||previous.user===identity&&sessionExpired(previous,n))){await signOut('Session expired. Sign in and verify 2FA again.');return;}
      saveBoundary(previous&&previous.user===identity?previous:{user:identity,started:n,last:n});
      activeSessionId=identity;document.body.classList.remove('access-locked');checkSession();
      $('api-result').textContent='Verified backend connection.';
