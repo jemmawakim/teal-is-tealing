@@ -4,13 +4,13 @@
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
 const sb=createClient('https://tswbkmlaxxnjixjmgqne.supabase.co','sb_publishable_FKJn2ZLv1aTI1WeGVrHi2g_ayQ836SN',{auth:{persistSession:true,storage:window.localStorage,autoRefreshToken:true,detectSessionInUrl:false,flowType:'pkce'}});
 const $=id=>document.getElementById(id), message=s=>$('auth-message').textContent=s;
-const IDLE_MS=15*60*1000, ABSOLUTE_MS=8*60*60*1000;
+const SESSION_MS=15*60*1000;
 const SESSION_KEY='teal-session-boundary-v1';
 let factorId=null,authRevision=0,activeSessionId=null,signingOut=false;
 const boundary=()=>{try {return JSON.parse(window.localStorage.getItem(SESSION_KEY)||'null');}catch{return null;}};
 function saveBoundary(value){try{if(value)window.localStorage.setItem(SESSION_KEY,JSON.stringify(value));else window.localStorage.removeItem(SESSION_KEY);}catch{}}
 function revokeBoundary(){saveBoundary({blocked:true,started:0,last:0});}
-function sessionExpired(b,now=Date.now()){return !b||!Number.isFinite(b.started)||!Number.isFinite(b.last)||now-b.last>IDLE_MS||now-b.started>ABSOLUTE_MS||b.last>now+60000||b.started>now+60000;}
+function sessionExpired(b,now=Date.now()){return !b||!Number.isFinite(b.started)||!Number.isFinite(b.last)||now-b.started>SESSION_MS||b.last>now+60000||b.started>now+60000;}
 function lock(){authRevision++;document.body.classList.add('access-locked');}
 async function signOut(reason='Signed out.'){
  if(signingOut)return;
@@ -26,16 +26,9 @@ function checkSession(){
  if(document.body.classList.contains('access-locked'))return;
  const b=boundary();
  if(sessionExpired(b)){void signOut('Session expired. Sign in and verify 2FA again.');return;}
- const remaining=Math.max(0,Math.ceil((Math.min(b.last+IDLE_MS,b.started+ABSOLUTE_MS)-Date.now())/60000));
- $('session-remaining').textContent='Timeout in '+remaining+' min';
+ const remaining=Math.max(0,Math.ceil((b.started+SESSION_MS-Date.now())/60000));
+ $('session-remaining').textContent='Session ends in '+remaining+' min';
 }
-function activity(){
- if(document.body.classList.contains('access-locked'))return;
- const b=boundary();
- if(sessionExpired(b)){void signOut('Session expired. Sign in and verify 2FA again.');return;}
- if(Date.now()-b.last>5000){b.last=Date.now();saveBoundary(b);}
-}
-['pointerdown','keydown','touchstart'].forEach(event=>window.addEventListener(event,activity,{passive:true}));
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){checkSession();}});
 window.addEventListener('storage',event=>{if(event.key===SESSION_KEY){checkSession();if(!event.newValue)lock();}});
 setInterval(checkSession,15000);
