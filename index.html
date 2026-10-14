@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f1f6f8"><title>Teal | Trading Control Center</title><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7f7f8"><title>Teal | Trading Control Center</title><style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root{--bg:#eff4f5;--paper:#fff;--ink:#101e1a;--muted:#71837d;--green:#026351;--mint:#e8f2ee;--line:#e6edeb;font:14px Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}*{box-sizing:border-box}body{margin:0;background:var(--bg)}button,a{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed}.app{display:grid;grid-template-columns:225px minmax(0,1fr);min-height:100vh;max-width:1720px;margin:auto;gap:18px;padding:16px}.sidebar{background:var(--green);color:#e4f4ee;border-radius:19px;display:flex;flex-direction:column;padding:26px 16px;gap:27px}.brand{font-size:32px;font-weight:850;letter-spacing:-2px;padding:0 13px}.brand span{color:#a8dece}.side-title{color:#acd2c6;letter-spacing:1.5px;text-transform:uppercase;font-size:10px;padding:0 13px;margin-bottom:9px}.nav{display:flex;flex-direction:column;gap:5px}.nav a{color:#d5ebe4;text-decoration:none;display:flex;align-items:center;gap:12px;padding:13px;border-radius:9px}.nav a.active{background:#e8f2ee;color:#084a3e;font-weight:700}.nav a:hover:not(.active){background:#137460}.sidebar-note{margin-top:auto;background:#176e5e;border:1px solid #378b79;border-radius:13px;padding:14px;line-height:1.5}.sidebar-note b{display:block;margin-bottom:4px}.sidebar-note small{color:#cee4dc}.main{min-width:0;padding:9px 11px 30px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:4px 0 30px}.crumb{color:var(--muted);font-size:12px}.top-right{display:flex;align-items:center;gap:12px}.avatar{width:34px;height:34px;border-radius:50%;background:#cfe8df;color:var(--green);display:grid;place-items:center;font-weight:800}.status{padding:7px 11px;border-radius:30px;background:#ffe3f0;color:#d91463;font-size:11px;font-weight:800;white-space:nowrap}.intro{margin-bottom:23px}.eyebrow{font-size:11px;color:var(--green);font-weight:800;letter-spacing:1.6px;text-transform:uppercase}.intro h1{font-size:clamp(26px,3.5vw,38px);letter-spacing:-1.2px;margin:8px 0 7px}.muted{color:var(--muted)}.intro p{margin:0}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:16px}.card{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:20px;min-width:0}.metric-label{font-size:12px;color:#61766e}.metric{font-size:clamp(21px,2.6vw,31px);letter-spacing:-.8px;font-weight:780;margin:20px 0 8px}.metric-note{font-size:11px;color:#84958f}.green{color:var(--green)}.amber{color:#ff4788}.wide{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,1fr);gap:16px;margin-bottom:16px}.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:19px}.card h2{font-size:16px;letter-spacing:-.3px;margin:0}.tag{background:var(--mint);color:var(--green);font-size:10px;border-radius:30px;padding:8px 11px;font-weight:700}.chart{height:202px;position:relative;border-radius:10px;background:repeating-linear-gradient(to bottom,#fff 0px,#fff 49px,#edf2ef 50px);overflow:hidden}.chart svg{width:100%;height:100%}.chart-label{position:absolute;top:12px;left:12px;background:#fff;padding:6px 9px;border:1px solid var(--line);border-radius:7px;font-size:10px;color:var(--muted)}.axis{display:flex;justify-content:space-between;color:#9aaba5;font-size:10px;margin-top:9px}.legend{display:flex;gap:20px;margin-top:16px;color:#7c928a;font-size:11px}.dot{display:inline-block;width:8px;height:8px;background:var(--green);border-radius:50%;margin-right:7px}.dot.grey{background:#a9c5b9}.row{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}.row b{font-size:12px}.row span{color:var(--muted);font-size:12px}.buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:20px}.btn{background:#e6f0ed;border:0;border-radius:9px;padding:14px 8px;color:#195d50;font-weight:750}.btn.primary{background:var(--green);color:white}.btn.danger{background:#fff0ee;color:#b34338}.btn:disabled{opacity:.53}.notice{font-size:11px;line-height:1.65;color:#7d8e89;margin:15px 0 0}.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;text-align:left;white-space:nowrap}th{color:#91a09a;font-size:11px;font-weight:650;border-bottom:1px solid var(--line);padding:13px 6px}td{padding:19px 6px;border-bottom:1px solid var(--line);font-size:12px}.empty{text-align:center;color:#879991;padding:33px 8px}footer.mobile{display:none}.tiny{font-size:10px;color:#91a19b;margin-top:18px}@media(max-width:1100px){.stats{grid-template-columns:repeat(2,1fr)}.wide{grid-template-columns:1fr}}@media(max-width:760px){.app{display:block;padding:0}.sidebar{display:none}.main{padding:22px 15px 88px}.topbar{padding-bottom:29px}.intro h1{font-size:29px}.stats{gap:10px}.card{padding:17px}.wide{gap:11px}.metric{font-size:26px;margin:15px 0 7px}footer.mobile{display:flex;position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--line);justify-content:space-around;padding:13px 8px;z-index:5}footer.mobile a{font-size:12px;color:var(--green);text-decoration:none;font-weight:700}.chart{height:185px}}@media(max-width:390px){.stats{gap:8px}.card{padding:13px}.metric{font-size:23px}.top-right{gap:6px}.status{font-size:10px}}
@@ -118,57 +118,115 @@ footer.mobile a{color:#0b6782}
 
 
 
-/* Teal Phase B: quiet charcoal surface, shared by login and dashboard.
-   No embedded images, external backgrounds, motion, or visual noise. */
+/* Teal light neutral interface: one palette for login + owner dashboard.
+   Chrome, panels, controls and status are shades of gray. Only the two
+   brand wordmarks are teal. No changes to authentication or API wiring. */
 :root{
- --bg:#11171b;--paper:#1b2429;--ink:#edf1f0;--muted:#a2b1b5;
- --green:#74c8bd;--mint:#24383a;--line:#344349;
- color-scheme:dark;
+  --bg:#f7f7f8;
+  --paper:#ffffff;
+  --ink:#242424;
+  --muted:#676b72;
+  --green:#41454a;
+  --mint:#f1f2f3;
+  --line:#e5e5e7;
+  --brand-teal:#087e76;
+  color:var(--ink);
+  color-scheme:light;
 }
-html{background:#11171b}
-body,body.access-locked{background:#11171b!important;color:var(--ink);min-height:100vh}
+html{background:var(--bg)}
+body,body.access-locked{background:var(--bg)!important;color:var(--ink);min-height:100vh}
 body::before,body::after{content:none!important;display:none!important}
 .app,#access-gate,footer.mobile{position:relative;z-index:1}
 .app,body:not(.access-locked) .app{max-width:1720px;margin:0 auto}
 body:not(.access-locked) .app{display:block!important;grid-template-columns:none!important;width:100%;padding:24px clamp(18px,4vw,64px)!important}
-.sidebar{background:#18282b;color:#e0eeee;border:1px solid #2a4143}
-.brand span,.eyebrow,.green{color:#84d7ca!important}
-.side-title,.sidebar-note small{color:#9abdbb}
-.nav a{color:#d0e4e1}.nav a.active{background:#304a49;color:#f1fbf9}
-.nav a:hover:not(.active){background:#25403e}
-.sidebar-note{background:#23383a;border-color:#385352}
+.sidebar{background:#f3f3f4;border:1px solid var(--line);color:var(--ink)}
+.brand,.side-title,.sidebar-note,.nav a{color:var(--ink)}
+.brand span{color:var(--brand-teal)}
+.nav a.active{background:#e8e8ea;color:#292b2d}
+.nav a:hover:not(.active){background:#e9eaeb}
+.sidebar-note{background:#ededee;border:1px solid #dedfe1}
+.sidebar-note small{color:var(--muted)}
 .main{background:transparent!important;max-width:1380px;width:100%;margin:0 auto;min-width:0;padding:16px 0 42px!important}
-.card,#access-gate #security{background:#1b2429!important;color:#edf1f0;border:1px solid #344349;box-shadow:0 8px 28px rgba(0,0,0,.11);backdrop-filter:none!important}
-.readiness-banner{background:#1c3032!important;border-color:#365052}
-.readiness-banner strong,.readiness-banner p,.readiness-pill{color:#d8eeeb}
-.readiness-pill,.tag{background:#29413f;color:#b9e8df;border-color:#3c5652}
-.empty-visual,.control-explainer{background:#192327!important;border-color:#344349}
-.empty-icon{background:#29413f;color:#b8e6dd}
-.intro h1,.intro p,.card h2,.metric,.row b,.subtle-row strong{color:#eef4f2!important}
-.crumb,.muted,.metric-label,.metric-note,.notice,.tiny,.row span,th,.empty,.control-explainer p,.empty-visual p{color:#a6b9bb!important}
-#access-gate>div:first-child{color:#b9eee4!important;text-shadow:none!important;letter-spacing:-2px}
-#access-gate{margin:clamp(40px,10vh,120px) auto!important;padding:16px}
-#access-gate #security{border-radius:16px;padding:28px}
-.btn{background:#2b4041;color:#d5eeeb;border:1px solid #3d5555}
-.btn.primary{background:#72c9bb;color:#10211f;border-color:#72c9bb}
-.btn.danger{background:#402b2b;color:#ffcdcb;border-color:#654140}
-.status,.top-right .status{background:#3b3038;color:#f1c4d2}
-.top-right #teal-logout-dashboard{background:#2b4041;color:#e6f2f0}
-.chart{background:repeating-linear-gradient(to bottom,#1b2429 0px,#1b2429 49px,#334046 50px)}
-.chart-label{background:#243138;color:#c0d1d1;border-color:#3a4b50}
-footer.mobile{background:#192428!important;border-color:#344349}
-footer.mobile a{color:#a4e5d9}
-input,select,textarea{background:#152024;color:#f2f5f4;border:1px solid #4a6266}
-input::placeholder{color:#9caeae}
-:focus-visible{outline:3px solid #90dfd2;outline-offset:3px}
+.card,#access-gate #security{
+  background:#fff!important;color:var(--ink);
+  border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 2px 15px rgba(28,30,33,.035);
+  backdrop-filter:none!important;
+}
+#access-gate{
+  width:min(100%,490px);margin:clamp(48px,11vh,128px) auto!important;
+  padding:16px!important;
+}
+#access-gate #security{padding:30px!important}
+#access-gate .login-brand{font-size:42px;line-height:1;font-weight:800;text-align:center;
+  font-family:'Space Grotesk','DM Sans',Arial,sans-serif;letter-spacing:-2px;
+  margin-bottom:8px;color:var(--brand-teal)!important}
+#access-gate .login-tagline{color:var(--brand-teal);text-align:center;
+  font-size:13px;font-weight:650;letter-spacing:.02em;margin:0 0 27px}
+.workspace-identity{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.app-wordmark{font-family:'Space Grotesk','DM Sans',Arial,sans-serif;
+  font-size:27px;line-height:1.05;font-weight:750;letter-spacing:-1.35px;
+  color:var(--brand-teal)!important}
+.app-tagline{font-size:12px;font-weight:650;letter-spacing:.02em;color:var(--brand-teal)!important}
+.workspace-identity .crumb{margin-top:10px;color:#82858c}
+.topbar{border-bottom:1px solid var(--line);padding-bottom:21px;margin-bottom:9px}
+.top-right{align-self:center}
+.top-right .status,.status{color:#52555a!important;background:#f0f0f1!important;border:1px solid #e2e2e4}
+.top-right .avatar,.avatar{background:#ebebed;color:#3b3d42}
+.intro h1,.intro p,.card h2,.metric,.row b,.subtle-row strong,
+.empty-visual strong,.control-explainer strong{color:var(--ink)!important}
+.crumb,.muted,.metric-label,.metric-note,.notice,.tiny,.row span,th,.empty,
+.control-explainer p,.empty-visual p,#mfa-fields #mfa-instructions{color:var(--muted)!important}
+.metric.green,.green,.eyebrow{color:#3f4246!important}
+.amber{color:#5c5d61}
+.readiness-banner{background:#f0f0f1!important;border-color:#e1e1e3}
+.readiness-banner strong{color:#303236}
+.readiness-banner p{color:#66686d}
+.readiness-pill,.tag{background:#f1f1f2;color:#555961;border:1px solid #e2e2e4}
+.empty-visual,.control-explainer{background:#fafafa!important;border-color:#dedfe2}
+.empty-icon{background:#eeeff0;color:#56585d}
+.card .card{background:#fdfdfd!important;border-color:#ececee;box-shadow:none}
+.btn{background:#efeff0;color:#323438;border:1px solid #e0e0e2;box-shadow:none;min-height:44px;border-radius:7px}
+.btn.primary{background:#303236;color:#fff;border:1px solid #303236}
+.btn.danger{background:#eeeef0;color:#414348;border:1px solid #dedfe1}
+.btn:hover:not(:disabled){filter:brightness(.94)}
+.btn:disabled{opacity:.55}
+#teal-logout,.top-right #teal-logout-dashboard{background:#f1f1f2!important;color:#42444a!important;border:1px solid #dedfe1!important}
+input,select,textarea,#mfa-fields #teal-mfa-code{
+  background:#fff!important;color:#242424!important;border:1px solid #c9cbd0!important;
+  border-radius:7px!important;min-height:43px;
+}
+#judgment-form label{color:#414348;display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600}
+#judgment-form input,#judgment-form select{display:block;width:100%;padding:10px 11px;margin-top:2px}
+input::placeholder,textarea::placeholder{color:#858990}
+input:focus,select:focus,textarea:focus,#mfa-fields #teal-mfa-code:focus{
+ border-color:#787d84!important;outline:2px solid #e0e1e4!important;outline-offset:1px
+}
+:focus-visible{outline:3px solid #81858d;outline-offset:2px}
+.chart{background:repeating-linear-gradient(to bottom,#fff 0px,#fff 49px,#eeeeef 50px)}
+.chart-label{background:#fff;color:#676b72;border-color:var(--line)}
+.dot{background:#484c52}.dot.grey{background:#c9cbcf}
+table th{color:#72767d}table td{color:#404349}
+table td.empty{color:#74777e}
+footer.mobile{background:#fff!important;border-color:var(--line)}
+footer.mobile a{color:#4c5056}
+body:not(.access-locked) footer.mobile{display:none}
 @media(max-width:760px){
- body:not(.access-locked) .app{display:block!important;padding:12px 16px 90px!important}
- .main{padding:18px 15px 95px!important}
- #access-gate{margin:30px auto!important;padding:14px}
- #access-gate #security{padding:22px}
+ body:not(.access-locked) .app{display:block!important;padding:12px 16px 95px!important}
+ .main{padding:14px 0 90px!important}
+ .topbar{align-items:flex-start;gap:12px}
+ .workspace-identity{margin-bottom:8px}
+ .app-wordmark{font-size:25px}
+ #access-gate{margin:38px auto!important;padding:14px!important}
+ #access-gate #security{padding:24px!important}
+ body:not(.access-locked) footer.mobile{display:flex}
+}
+@media(max-width:390px){
+ .topbar .top-right{gap:8px}
+ .workspace-identity .crumb{font-size:10px}
 }
 
-</style></head><body class="access-locked"><div id="access-gate" role="main" style="max-width:550px;margin:clamp(30px,9vh,120px) auto;padding:16px"><div style="text-align:center;color:#026351;font-size:34px;font-weight:850;margin-bottom:24px">teal.</div><section class="card" id="security" style="margin-bottom:16px"><div class="card-head"><h2>🔐 Secure access</h2><span class="tag" id="auth-state">Signed out</span></div><p class="muted" id="auth-message">Enter your authenticator code to finish signing in. Trading remains disabled.</p><div id="login-fields" style="display:grid;gap:9px;max-width:450px"><button class="btn primary" id="teal-google" type="button">Continue with Google</button></div><form id="mfa-fields" hidden novalidate><p id="mfa-instructions"></p><div id="mfa-qr"></div><label for="teal-mfa-code" style="display:block;font-weight:700;margin:10px 0 7px">Authenticator code</label><input id="teal-mfa-code" name="totp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required aria-describedby="mfa-instructions" placeholder="6-digit code" style="padding:13px;border:1px solid #ccd8d3;border-radius:10px"><button class="btn primary" id="teal-verify" type="submit">Verify 2FA</button></form><button class="btn" id="teal-logout" type="button" hidden>Sign out</button><p class="notice" id="api-result">No portfolio data will appear without a verified owner session with 2FA.</p></section></div><div class="app"><main class="main" id="overview"><div class="topbar"><span class="crumb">Workspace <span aria-hidden="true">/</span> Paper research · Build B-20261014.2</span><div class="top-right"><span class="status">● Trading offline</span><span id="session-remaining" class="crumb" aria-live="off">Session active</span><button class="btn" id="teal-logout-dashboard" type="button" style="padding:9px 13px">Sign out</button><div class="avatar" title="Authenticated owner" aria-label="Owner profile">T</div></div></div><section class="card" id="research-workspace" aria-labelledby="research-title" style="margin:22px 0">
+</style></head><body class="access-locked"><div id="access-gate" role="main" style="max-width:550px;margin:clamp(30px,9vh,120px) auto;padding:16px"><div class="login-brand">teal.</div><p class="login-tagline">teal is tealing</p><section class="card" id="security" style="margin-bottom:16px"><div class="card-head"><h2>🔐 Secure access</h2><span class="tag" id="auth-state">Signed out</span></div><p class="muted" id="auth-message">Enter your authenticator code to finish signing in. Trading remains disabled.</p><div id="login-fields" style="display:grid;gap:9px;max-width:450px"><button class="btn primary" id="teal-google" type="button">Continue with Google</button></div><form id="mfa-fields" hidden novalidate><p id="mfa-instructions"></p><div id="mfa-qr"></div><label for="teal-mfa-code" style="display:block;font-weight:700;margin:10px 0 7px">Authenticator code</label><input id="teal-mfa-code" name="totp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required aria-describedby="mfa-instructions" placeholder="6-digit code" style="padding:13px;border:1px solid #c9cbd0;border-radius:7px"><button class="btn primary" id="teal-verify" type="submit">Verify 2FA</button></form><button class="btn" id="teal-logout" type="button" hidden>Sign out</button><p class="notice" id="api-result">No portfolio data will appear without a verified owner session with 2FA.</p></section></div><div class="app"><main class="main" id="overview"><div class="topbar"><div class="workspace-identity"><span class="app-wordmark">teal.</span><span class="app-tagline">teal is tealing</span><span class="crumb">Workspace <span aria-hidden="true">/</span> Paper research · Build B-20261014.2</span></div><div class="top-right"><span class="status">● Trading offline</span><span id="session-remaining" class="crumb" aria-live="off">Session active</span><button class="btn" id="teal-logout-dashboard" type="button" style="padding:9px 13px">Sign out</button><div class="avatar" title="Authenticated owner" aria-label="Owner profile">T</div></div></div><section class="card" id="research-workspace" aria-labelledby="research-title" style="margin:22px 0">
 <div class="card-head"><h2 id="research-title">Research workspace</h2><span class="tag">Owner MFA · Paper only</span></div>
 <p class="muted">Your secured research journal, paper experiments and audit integrity. This view loads only after verified Google sign-in and MFA.</p>
 <div class="stats" style="margin:18px 0">
