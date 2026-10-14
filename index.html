@@ -168,7 +168,7 @@ input::placeholder{color:#9caeae}
  #access-gate #security{padding:22px}
 }
 
-</style></head><body class="access-locked"><div id="access-gate" role="main" style="max-width:550px;margin:clamp(30px,9vh,120px) auto;padding:16px"><div style="text-align:center;color:#026351;font-size:34px;font-weight:850;margin-bottom:24px">teal.</div><section class="card" id="security" style="margin-bottom:16px"><div class="card-head"><h2>🔐 Secure access</h2><span class="tag" id="auth-state">Signed out</span></div><p class="muted" id="auth-message">Enter your authenticator code to finish signing in. Trading remains disabled.</p><div id="login-fields" style="display:grid;gap:9px;max-width:450px"><button class="btn primary" id="teal-google" type="button">Continue with Google</button></div><form id="mfa-fields" hidden novalidate><p id="mfa-instructions"></p><div id="mfa-qr"></div><label for="teal-mfa-code" style="display:block;font-weight:700;margin:10px 0 7px">Authenticator code</label><input id="teal-mfa-code" name="totp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required aria-describedby="mfa-instructions" placeholder="6-digit code" style="padding:13px;border:1px solid #ccd8d3;border-radius:10px"><button class="btn primary" id="teal-verify" type="submit">Verify 2FA</button></form><button class="btn" id="teal-logout" type="button" hidden>Sign out</button><p class="notice" id="api-result">No portfolio data will appear without a verified owner session with 2FA.</p></section></div><div class="app"><main class="main" id="overview"><div class="topbar"><span class="crumb">Workspace <span aria-hidden="true">/</span> Paper research · Build B-20261014</span><div class="top-right"><span class="status">● Trading offline</span><span id="session-remaining" class="crumb" aria-live="off">Session active</span><button class="btn" id="teal-logout-dashboard" type="button" style="padding:9px 13px">Sign out</button><div class="avatar" title="Authenticated owner" aria-label="Owner profile">T</div></div></div><section class="card" id="research-workspace" aria-labelledby="research-title" style="margin:22px 0">
+</style></head><body class="access-locked"><div id="access-gate" role="main" style="max-width:550px;margin:clamp(30px,9vh,120px) auto;padding:16px"><div style="text-align:center;color:#026351;font-size:34px;font-weight:850;margin-bottom:24px">teal.</div><section class="card" id="security" style="margin-bottom:16px"><div class="card-head"><h2>🔐 Secure access</h2><span class="tag" id="auth-state">Signed out</span></div><p class="muted" id="auth-message">Enter your authenticator code to finish signing in. Trading remains disabled.</p><div id="login-fields" style="display:grid;gap:9px;max-width:450px"><button class="btn primary" id="teal-google" type="button">Continue with Google</button></div><form id="mfa-fields" hidden novalidate><p id="mfa-instructions"></p><div id="mfa-qr"></div><label for="teal-mfa-code" style="display:block;font-weight:700;margin:10px 0 7px">Authenticator code</label><input id="teal-mfa-code" name="totp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required aria-describedby="mfa-instructions" placeholder="6-digit code" style="padding:13px;border:1px solid #ccd8d3;border-radius:10px"><button class="btn primary" id="teal-verify" type="submit">Verify 2FA</button></form><button class="btn" id="teal-logout" type="button" hidden>Sign out</button><p class="notice" id="api-result">No portfolio data will appear without a verified owner session with 2FA.</p></section></div><div class="app"><main class="main" id="overview"><div class="topbar"><span class="crumb">Workspace <span aria-hidden="true">/</span> Paper research · Build B-20261014.2</span><div class="top-right"><span class="status">● Trading offline</span><span id="session-remaining" class="crumb" aria-live="off">Session active</span><button class="btn" id="teal-logout-dashboard" type="button" style="padding:9px 13px">Sign out</button><div class="avatar" title="Authenticated owner" aria-label="Owner profile">T</div></div></div><section class="card" id="research-workspace" aria-labelledby="research-title" style="margin:22px 0">
 <div class="card-head"><h2 id="research-title">Research workspace</h2><span class="tag">Owner MFA · Paper only</span></div>
 <p class="muted">Your secured research journal, paper experiments and audit integrity. This view loads only after verified Google sign-in and MFA.</p>
 <div class="stats" style="margin:18px 0">
@@ -186,11 +186,25 @@ input::placeholder{color:#9caeae}
 <div class="tablewrap"><table><thead><tr><th>Experiment</th><th>Hypothesis</th><th>Net return</th><th>Drawdown</th><th>Paper review</th></tr></thead>
 <tbody id="research-table"><tr><td colspan="5" class="empty">Waiting for authenticated research data.</td></tr></tbody></table></div>
 <p class="tiny">No broker connections, live market orders or production trading. Empty history means no research has been persisted yet.</p>
+</section><section class="card" id="autonomy-workspace" style="margin:18px 0" aria-labelledby="autonomy-title">
+<div class="card-head"><h2 id="autonomy-title">Autonomous research · First live cycle</h2><span class="tag">Paper research · Read-only snapshot</span></div>
+<p class="muted">Teal collected source-attributed Federal Reserve news and generated questions to test. This is a deployed snapshot, not a live trading feed.</p>
+<div class="stats" style="margin:14px 0">
+<div class="card"><div class="metric-label">News collected</div><div class="metric" id="autonomy-news-count">—</div></div>
+<div class="card"><div class="metric-label">Research questions</div><div class="metric" id="autonomy-question-count">—</div></div>
+<div class="card"><div class="metric-label">Research cycle</div><div class="metric" id="autonomy-cycle-state" style="font-size:17px">Not loaded</div></div>
+</div>
+<button class="btn primary" id="autonomy-refresh" type="button">Load agent findings</button>
+<p class="notice" id="autonomy-status">Sign in to view attributed research findings.</p>
+<div id="autonomy-questions" style="display:grid;gap:10px;margin:14px 0"></div>
+<h3 style="margin:18px 0 10px">Source-linked news</h3>
+<div id="autonomy-news" style="display:grid;gap:8px"></div>
+<p class="tiny">No real-money trades, live market prices or validated return claims. Owner-only snapshot.</p>
 </section><section class="card security-panel" id="security-check"><div class="card-head"><h2>Security diagnostics</h2><span class="tag">Broker-free</span></div><p class="muted">Check that the independent Risk Manager accepts a signed test approval once and rejects replay. No trading occurs.</p><button class="btn primary" id="teal-security-test" type="button">Run security test</button><p class="notice" id="teal-security-result" role="status" aria-live="polite">Ready to run. Uses your verified session.</p></section><div class="intro"><span class="eyebrow">TEAL CONTROL CENTER</span><h1>Research operations</h1><p class="muted">Authenticated, broker-free paper research. Live operations are disabled.</p></div><section class="readiness-banner" aria-label="System readiness"><div><strong>System secured · Agent not running</strong><p>Security foundation verified. Agent orchestration and market data are next.</p></div><span class="readiness-pill">Broker disconnected</span></section><div class="stats"><section class="card"><div class="metric-label">Account environment</div><div class="metric green">Sandbox</div><div class="metric-note">Not linked to any trading account</div></section><section class="card"><div class="metric-label">Agent status</div><div class="metric amber">Not running</div><div class="metric-note">Phase B development pending</div></section><section class="card"><div class="metric-label">Open positions</div><div class="metric">—</div><div class="metric-note">Live data not connected</div></section><section class="card"><div class="metric-label">Today's P&L</div><div class="metric">—</div><div class="metric-note">Awaiting secured API feed</div></section></div><div class="wide"><section class="card" id="performance"><div class="card-head"><h2>Performance</h2><span class="tag">No data yet</span></div><div class="empty-visual" role="status"><div class="empty-icon" aria-hidden="true">▦</div><strong>Performance tracking starts in Phase B</strong><p>No trades or market feeds are connected. When simulation is enabled, this space will show verified performance and risk metrics.</p></div><div class="subtle-row"><span>Data source</span><strong>Not connected</strong></div></section><section class="card" id="controls"><div class="card-head"><h2>Agent control</h2><span class="tag">Locked</span></div><div class="row"><b>Broker connection</b><span>Disconnected</span></div><div class="row"><b>Trading scheduler</b><span>Not running</span></div><div class="row"><b>Automatic exits</b><span>Not configured</span></div><div class="row"><b>Real-money execution</b><span>Disabled</span></div><div class="control-explainer"><strong>Controls unavailable</strong><p>The agent is not deployed, so there is nothing to start, pause, or stop. The backend emergency stop remains enabled.</p></div><p class="notice">These will become operational controls after Phase B safety tests, not before.</p></section></div><div class="wide"><section class="card" id="activity"><div class="card-head"><h2>Recent trades</h2><span class="tag">No broker data</span></div><div class="tablewrap"><table><thead><tr><th>Instrument</th><th>Strategy</th><th>Side</th><th>Entry</th><th>P&L</th><th>Status</th></tr></thead><tbody><tr><td colspan="6" class="empty"><strong>No trades to display</strong><div>Trading is disabled. Verified simulated activity will appear here when available.</div></td></tr></tbody></table></div></section><section class="card" id="strategy"><div class="card-head"><h2>Trading mandate</h2><span class="tag">Draft</span></div><div class="row"><b>Strategies</b><span>Day + swing</span></div><div class="row"><b>Markets</b><span>Multi-asset</span></div><div class="row"><b>Initial leverage</b><span>1×</span></div><div class="row"><b>New broker orders</b><span>Disabled</span></div></section></div><div class="tiny">Teal security-first preview · No live positions or financial account information on this page.</div></main></div><footer class="mobile"><a href="#overview">▦ Overview</a><a href="#performance">◫ Performance</a><a href="#activity">⌁ Activity</a><a href="#controls">⚙ Controls</a></footer><script type="module">
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
 const sb=createClient('https://tswbkmlaxxnjixjmgqne.supabase.co','sb_publishable_FKJn2ZLv1aTI1WeGVrHi2g_ayQ836SN',{auth:{persistSession:true,storage:window.localStorage,autoRefreshToken:true,detectSessionInUrl:false,flowType:'pkce'}});
 const $=id=>document.getElementById(id), message=s=>$('auth-message').textContent=s;
-const SESSION_MS=15*60*1000;
+const SESSION_MS=Date.now()<Date.parse('2026-10-17T00:00:00Z')?8*60*60*1000:15*60*1000;
 const SESSION_KEY='teal-session-boundary-v1';
 let factorId=null,authRevision=0,activeSessionId=null,signingOut=false,mfaBusy=false;
 const focusWhenReady=id=>{requestAnimationFrame(()=>{const el=$(id);if(el&&!el.closest("[hidden]")&&!el.disabled&&document.activeElement?.tagName!=="INPUT")el.focus({preventScroll:true});});};
@@ -198,7 +212,7 @@ const boundary=()=>{try {return JSON.parse(window.localStorage.getItem(SESSION_K
 function saveBoundary(value){try{if(value)window.localStorage.setItem(SESSION_KEY,JSON.stringify(value));else window.localStorage.removeItem(SESSION_KEY);}catch{}}
 function revokeBoundary(){saveBoundary({blocked:true,started:0,last:0});}
 function sessionExpired(b,now=Date.now()){return !b||!Number.isFinite(b.started)||!Number.isFinite(b.last)||now-b.started>SESSION_MS||b.last>now+60000||b.started>now+60000;}
-function lock(){authRevision++;document.body.classList.add('access-locked');if($('research-table'))researchReset();}
+function lock(){authRevision++;document.body.classList.add('access-locked');if($('research-table'))researchReset();if($('autonomy-news'))autonomyReset();}
 async function signOut(reason='Signed out.'){
  if(signingOut)return;
  signingOut=true;lock();revokeBoundary();activeSessionId=null;
@@ -214,7 +228,7 @@ function checkSession(){
  const b=boundary();
  if(sessionExpired(b)){void signOut('Session expired. Sign in and verify 2FA again.');return;}
  const remaining=Math.max(0,Math.ceil((b.started+SESSION_MS-Date.now())/60000));
- $('session-remaining').textContent='Session ends in '+remaining+' min';
+ $('session-remaining').textContent='Testing session: '+(remaining>=60?Math.ceil(remaining/60)+' h':remaining+' min')+' left'';
 }
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){checkSession();}});
 window.addEventListener('storage',event=>{if(event.key===SESSION_KEY){checkSession();if(!event.newValue)lock();}});
@@ -316,6 +330,47 @@ async function verifyResearch(){
   $('research-status').textContent='Audit check unavailable: '+(e?.message||'Network error');
  }
 }
+let autonomyRequestId=0;
+function autonomyReset(){
+ autonomyRequestId++;
+ $('autonomy-news-count').textContent='—';
+ $('autonomy-question-count').textContent='—';
+ $('autonomy-cycle-state').textContent='Not loaded';
+ $('autonomy-status').textContent='Sign in to view attributed research findings.';
+ $('autonomy-news').replaceChildren();
+ $('autonomy-questions').replaceChildren();
+}
+async function loadAutonomy(){
+ const request=++autonomyRequestId;
+ $('autonomy-status').textContent='Loading source-attributed agent findings…';
+ try{
+  const token=await researchToken();
+  const data=await researchFetch('/api/research/autonomy',token);
+  if(request!==autonomyRequestId||document.body.classList.contains('access-locked'))return;
+  if(data.mode!=='paper_research'||data.live_trading_enabled!==false||data.snapshot!==true||
+     !Array.isArray(data.news)||!Array.isArray(data.questions))throw Error('Unexpected research response');
+  $('autonomy-news-count').textContent=String(data.news.length);
+  $('autonomy-question-count').textContent=String(data.questions.length);
+  $('autonomy-cycle-state').textContent='Collected';
+  $('autonomy-questions').replaceChildren();
+  for(const q of data.questions){
+   const panel=document.createElement('div');panel.className='card';
+   const heading=document.createElement('strong');heading.textContent=String(q.topic||'Research').toUpperCase();
+   const p=document.createElement('p');p.textContent=q.question||'';
+   const note=document.createElement('p');note.className='muted';note.textContent='Challenge: '+(q.disconfirmation||'Not specified');
+   panel.append(heading,p,note);$('autonomy-questions').append(panel);
+  }
+  $('autonomy-news').replaceChildren();
+  for(const n of data.news){
+   const panel=document.createElement('div');panel.className='card';
+   const link=document.createElement('a');link.href=n.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=n.title;
+   const note=document.createElement('p');note.className='muted';note.textContent=n.source+' · '+n.published_at.slice(0,10);
+   panel.append(link,note);$('autonomy-news').append(panel);
+  }
+  $('autonomy-status').textContent='Last research snapshot: '+new Date(data.generated_at).toLocaleString()+'. Human review pending. No live prices.';
+ }catch(e){if(request===autonomyRequestId)$('autonomy-status').textContent='Agent findings unavailable: '+(e?.message||'Network error');}
+}
+$('autonomy-refresh').onclick=()=>{void loadAutonomy();};
 $('research-refresh').onclick=()=>{void loadResearch();};
 async function runSyntheticResearch(){
  const button=$('research-demo');
@@ -363,7 +418,7 @@ async function refresh(){
      if(previous&&(previous.blocked||previous.user===identity&&sessionExpired(previous,n))){await signOut('Session expired. Sign in and verify 2FA again.');return;}
      saveBoundary(previous&&previous.user===identity?previous:{user:identity,started:n,last:n});
      activeSessionId=identity;document.body.classList.remove('access-locked');checkSession();
-     $('api-result').textContent='Verified backend connection.';void loadResearch();
+     $('api-result').textContent='Verified backend connection.';void loadResearch();void loadAutonomy();
    }else{$('api-result').textContent='Access locked: '+(body.detail||('API HTTP '+r.status));}}
    catch(e){$('api-result').textContent='Access locked: secure API unavailable ('+(e?.message||'network error')+').';}
    return;
