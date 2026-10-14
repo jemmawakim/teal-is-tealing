@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - index.html
+      - terminal.mjs
       - .github/workflows/pages.yml
   workflow_dispatch:
 permissions:
@@ -21,6 +22,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Gate production deployment on module syntax and content security
+        run: |
+          node --check terminal.mjs
+          python3 - <<'PY'
+          from pathlib import Path
+          html=Path('index.html').read_text()
+          js=Path('terminal.mjs').read_text()
+          assert 'src="./terminal.mjs"' in html, "Missing local owner terminal module"
+          assert 'Content-Security-Policy' in html, "Missing security policy"
+          assert "script-src 'self'" in html, "Missing allowlisted script policy"
+          assert "storage:window.sessionStorage" in js, "Persistent token storage forbidden"
+          assert "const SESSION_MS=15*60*1000;" in js, "Session lifetime mismatch"
+          assert "teal-terminal" in html and "research/terminal" in js
+          assert "api.github.com" not in html and "api.github.com" not in js
+          PY
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

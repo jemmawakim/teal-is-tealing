@@ -2,7 +2,7 @@ name: Teal Frontend JavaScript Smoke
 on:
   push:
     branches: [main]
-    paths: ['index.html','.github/workflows/teal-frontend-smoke.yml']
+    paths: ['index.html','terminal.mjs','.github/workflows/teal-frontend-smoke.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -28,6 +28,7 @@ jobs:
           assert "script-src 'self'" in html, 'Scripts must require an allowlist'
           assert "'unsafe-eval'" not in html, 'No eval permitted'
           assert "storage:window.sessionStorage" in js, 'Avoid long-lived browser token storage'
+          assert "const SESSION_MS=15*60*1000;" in js, 'Fixed session expiry required'
           assert '@supabase/supabase-js@2.76.1' in js, 'Pin auth SDK version'
           assert '@supabase/supabase-js@2/+' not in js, 'Unpinned fallback SDK'
           assert "googleButton.disabled=false" in js

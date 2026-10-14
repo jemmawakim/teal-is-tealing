@@ -18,7 +18,7 @@ if(!createClient){
 googleButton.disabled=false;
 const sb=createClient('https://tswbkmlaxxnjixjmgqne.supabase.co','sb_publishable_FKJn2ZLv1aTI1WeGVrHi2g_ayQ836SN',{auth:{persistSession:true,storage:window.sessionStorage,autoRefreshToken:true,detectSessionInUrl:false,flowType:'pkce'}});
 const $=id=>document.getElementById(id), message=s=>$('auth-message').textContent=s;
-const SESSION_MS=Date.now()<Date.parse('2026-10-17T00:00:00Z')?8*60*60*1000:15*60*1000;
+const SESSION_MS=15*60*1000;
 const SESSION_KEY='teal-session-boundary-v1';
 let factorId=null,authRevision=0,activeSessionId=null,signingOut=false,mfaBusy=false;
 const focusWhenReady=id=>{requestAnimationFrame(()=>{const el=$(id);if(el&&!el.closest("[hidden]")&&!el.disabled&&document.activeElement?.tagName!=="INPUT")el.focus({preventScroll:true});});};
@@ -42,7 +42,7 @@ function checkSession(){
  const b=boundary();
  if(sessionExpired(b)){void signOut('Session expired. Sign in and verify 2FA again.');return;}
  const remaining=Math.max(0,Math.ceil((b.started+SESSION_MS-Date.now())/60000));
- $('session-remaining').textContent='Testing session: '+(remaining>=60?Math.ceil(remaining/60)+' h':remaining+' min')+' left';
+ $('session-remaining').textContent='Session: '+(remaining>=60?Math.ceil(remaining/60)+' h':remaining+' min')+' left';
 }
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){checkSession();}});
 window.addEventListener('storage',event=>{if(event.key===SESSION_KEY){checkSession();if(!event.newValue)lock();}});
