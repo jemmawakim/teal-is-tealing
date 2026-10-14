@@ -36,6 +36,13 @@ jobs:
           assert "terminal-market-rows" in html
           assert "terminal-predictions" in html
           assert "terminal-paper-cases" in html
+          assert "terminal-tradingview" in html
+          assert "sandbox=\"allow-scripts allow-popups\"" in html
+          assert "allow-same-origin" not in html.split('id="terminal-tradingview"')[1].split('</iframe>')[0]
+          assert "loadCurrentQuotes" in js
+          assert "loadTradingView" in js
+          assert "research/quotes" in html
+          assert "Coinbase Exchange public ticker" in js
           assert "api.github.com" not in html, "Private GitHub must not be called from public HTML"
           assert "research/autonomy" in html or "autonomy-workspace" in html
           print("Dashboard module and auth wiring found")

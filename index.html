@@ -269,6 +269,19 @@ body:not(.access-locked) footer.mobile{display:none}
  .terminal-grid{grid-template-columns:1fr}
 }
 @media(max-width:350px){.terminal-kpis{grid-template-columns:1fr}}
+/* Current quote cards and isolated TradingView panel; neutral theme */
+.terminal-quotes{grid-column:1/-1}
+.terminal-quotes .card-head{margin-bottom:10px}
+.terminal-quotes .card-head .btn{padding:8px 14px;min-height:36px;font-size:11px}
+.terminal-quote-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+.terminal-quote{background:#f7f7f8;border:1px solid #e9e9ea;border-radius:9px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.terminal-quote>span{font-size:11px;font-weight:700;color:#6b6d72}
+.terminal-quote>strong{font-family:'Space Grotesk','DM Sans',Arial,sans-serif;font-size:clamp(19px,2.5vw,28px);letter-spacing:-.6px;color:#303236}
+.terminal-quote>small{font-size:10px;line-height:1.6;color:#73767d}
+.terminal-charthead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:19px 0 9px}
+.terminal-quotes iframe{border:1px solid #e8e8e9!important;border-radius:8px}
+@media(max-width:600px){.terminal-charthead{flex-wrap:wrap}.terminal-quotes iframe{height:165px!important}}
+@media(max-width:380px){.terminal-quote-grid{grid-template-columns:1fr}}
 </style></head><body class="access-locked"><div id="access-gate" role="main" style="max-width:550px;margin:clamp(30px,9vh,120px) auto;padding:16px"><div class="login-brand">teal.</div><p class="login-tagline">teal is tealing</p><section class="card" id="security" style="margin-bottom:16px"><div class="card-head"><h2>🔐 Secure access</h2><span class="tag" id="auth-state">Signed out</span></div><p class="muted" id="auth-message">Enter your authenticator code to finish signing in. Trading remains disabled.</p><div id="login-fields" style="display:grid;gap:9px;max-width:450px"><button class="btn primary" id="teal-google" type="button">Continue with Google</button></div><form id="mfa-fields" hidden novalidate><p id="mfa-instructions"></p><div id="mfa-qr"></div><label for="teal-mfa-code" style="display:block;font-weight:700;margin:10px 0 7px">Authenticator code</label><input id="teal-mfa-code" name="totp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required aria-describedby="mfa-instructions" placeholder="6-digit code" style="padding:13px;border:1px solid #c9cbd0;border-radius:7px"><button class="btn primary" id="teal-verify" type="submit">Verify 2FA</button></form><button class="btn" id="teal-logout" type="button" hidden>Sign out</button><p class="notice" id="api-result">No portfolio data will appear without a verified owner session with 2FA.</p></section></div><div class="app"><main class="main" id="overview"><div class="topbar"><div class="workspace-identity"><span class="app-wordmark">teal.</span><span class="app-tagline">teal is tealing</span><span class="crumb">Workspace <span aria-hidden="true">/</span> Paper research · Build B-20261014.2</span></div><div class="top-right"><span class="status">● Trading offline</span><span id="session-remaining" class="crumb" aria-live="off">Session active</span><button class="btn" id="teal-logout-dashboard" type="button" style="padding:9px 13px">Sign out</button><div class="avatar" title="Authenticated owner" aria-label="Owner profile">T</div></div></div><section class="teal-terminal" id="teal-terminal" aria-labelledby="terminal-title">
 <div class="card-head terminal-header">
 <div><div class="eyebrow">PRIVATE INTELLIGENCE · PAPER ONLY</div><h1 id="terminal-title">Teal Terminal</h1><p class="muted">Attributed research, historical market context, and prospective experiments. Nothing here is a trading instruction.</p></div>
@@ -282,6 +295,17 @@ body:not(.access-locked) footer.mobile{display:none}
 <div class="card terminal-kpi"><span>Outcomes evaluated</span><strong id="terminal-scored-count">—</strong><small>Future results only</small></div>
 </div>
 <div class="terminal-grid">
+<section class="card terminal-section terminal-quotes" aria-labelledby="terminal-quotes-heading">
+<div class="card-head"><h2 id="terminal-quotes-heading">Current market prices</h2><button type="button" class="btn" id="terminal-quote-refresh">Update quotes</button></div>
+<p class="muted" id="terminal-quote-status" role="status" aria-live="polite">Secure market quotes load after owner authentication.</p>
+<div id="terminal-quote-grid" class="terminal-quote-grid" aria-label="Recent exchange-traded cryptocurrency prices">
+<div class="terminal-quote"><span>BTC / USD</span><strong id="quote-btc">—</strong><small id="quote-btc-time">Waiting for current exchange data</small></div>
+<div class="terminal-quote"><span>ETH / USD</span><strong id="quote-eth">—</strong><small id="quote-eth-time">Waiting for current exchange data</small></div>
+</div>
+<div class="terminal-charthead"><span class="eyebrow">TRADINGVIEW MARKET VIEW</span><span class="tag">Crypto/FX current · equities may be delayed</span></div>
+<iframe id="terminal-tradingview" title="TradingView SPY gold US yield bitcoin ethereum and forex market overview" sandbox="allow-scripts allow-popups" referrerpolicy="no-referrer" loading="lazy" style="display:block;border:0;width:100%;height:145px;background:#fff" aria-label="Isolated TradingView market ticker"></iframe>
+<p class="tiny">TradingView widget prices are visual reference only and are not used for Teal's automated forecasts. US equity and ETF quotes may be delayed. <a href="https://www.tradingview.com/widget-docs/faq/data/" target="_blank" rel="noopener noreferrer">Provider data limitations</a>. Coinbase values are recent exchange-trade snapshots, not an executable market bid.</p>
+</section>
 <section class="card terminal-section" aria-labelledby="terminal-market-heading"><div class="card-head"><h2 id="terminal-market-heading">Market watchlist</h2><span class="tag">Historical, not live</span></div><div class="tablewrap"><table><thead><tr><th>Asset</th><th>Last observed</th><th>5-session change</th><th>Source</th></tr></thead><tbody id="terminal-market-rows"><tr><td class="empty" colspan="4">Waiting for secured data.</td></tr></tbody></table></div></section>
 <section class="card terminal-section" aria-labelledby="terminal-risk-heading"><div class="card-head"><h2 id="terminal-risk-heading">Paper portfolio & risk</h2><span class="tag">No brokerage</span></div><div class="terminal-risk"><div><span class="muted">Actual positions</span><strong>0</strong></div><div><span class="muted">Evaluated paper scenarios</span><strong id="terminal-paper-cases">—</strong></div><div><span class="muted">Directional accuracy</span><strong id="terminal-accuracy">—</strong></div><div><span class="muted">Estimated performance</span><strong id="terminal-performance">Awaiting evidence</strong></div></div><p class="notice">Hypothetical estimates use assumed fees and slippage. No simulated outcome is an executed trade or proven return.</p></section>
 <section class="card terminal-section" aria-labelledby="terminal-news-heading"><div class="card-head"><h2 id="terminal-news-heading">Research investigations</h2><span class="tag">Evidence review</span></div><div id="terminal-investigations" class="terminal-stack"><p class="muted">Research findings will appear after secure access.</p></div></section>
@@ -372,7 +396,7 @@ const boundary=()=>{try {return JSON.parse(window.localStorage.getItem(SESSION_K
 function saveBoundary(value){try{if(value)window.localStorage.setItem(SESSION_KEY,JSON.stringify(value));else window.localStorage.removeItem(SESSION_KEY);}catch{}}
 function revokeBoundary(){saveBoundary({blocked:true,started:0,last:0});}
 function sessionExpired(b,now=Date.now()){return !b||!Number.isFinite(b.started)||!Number.isFinite(b.last)||now-b.started>SESSION_MS||b.last>now+60000||b.started>now+60000;}
-function lock(){authRevision++;document.body.classList.add('access-locked');if($('research-table'))researchReset();if($('autonomy-news'))autonomyReset();if($('terminal-status'))terminalReset();}
+function lock(){authRevision++;document.body.classList.add('access-locked');if($('research-table'))researchReset();if($('autonomy-news'))autonomyReset();if($('terminal-status'))terminalReset();if($('terminal-quote-status'))quoteReset();}
 async function signOut(reason='Signed out.'){
  if(signingOut)return;
  signingOut=true;lock();revokeBoundary();activeSessionId=null;
@@ -528,6 +552,79 @@ $('judgment-form').addEventListener('submit',async event=>{
 });
 
 // Protected owner intelligence terminal. No public/private GitHub fetches from browser.
+// Market reference display. Third-party TradingView scripts are restricted to a
+// sandboxed, opaque-origin iframe; they never share the owner's Supabase origin.
+let quoteRequestId=0,quoteLastLoaded=0;
+function quoteReset(){
+ quoteRequestId++;
+ $('terminal-quote-status').textContent='Sign in with 2FA to load current exchange quotes.';
+ for(const id of ['quote-btc','quote-eth'])$(id).textContent='—';
+ for(const id of ['quote-btc-time','quote-eth-time'])$(id).textContent='Locked. No market data retained.';
+ const frame=$('terminal-tradingview');
+ if(frame){frame.removeAttribute('srcdoc');frame.src='about:blank';}
+ quoteLastLoaded=0;
+}
+function loadTradingView(){
+ if(document.body.classList.contains('access-locked'))return;
+ const frame=$('terminal-tradingview');
+ if(frame.hasAttribute('srcdoc'))return;
+ // No allow-same-origin! The external market widget has no access to Supabase
+ // storage, session tokens, parent DOM or Teal's authenticated API.
+ const tvBody='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
+  '<style>html,body{margin:0;padding:0;background:#fff;color:#454545;font:12px sans-serif;overflow:hidden}</style>'+
+  '</head><body><div style="padding:12px 2px">Market reference supplied by TradingView · check symbol delay notices</div>'+
+  '<tv-tickers symbols="AMEX:SPY,AMEX:GLD,TVC:US10Y,FX:EURUSD,BITSTAMP:BTCUSD,BITSTAMP:ETHUSD" hide-chart></tv-tickers>'+
+  '<scr'+'ipt type="module" src="https://widgets.tradingview-widget.com/w/en/tv-tickers.js"></scr'+'ipt>'+
+  '</body></html>';
+ frame.srcdoc=tvBody;
+}
+function quoteRender(data){
+ if(!data||data.schema!==1||data.mode!=='read_only_market_snapshot'||data.paper_only!==true||
+    data.live_trading_enabled!==false||data.broker_connected!==false||!Array.isArray(data.quotes))
+    throw Error('Unexpected market data response.');
+ const format=(v)=>{const num=Number(v);return Number.isFinite(num)&&num>0?
+   new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(num):'—'};
+ const map={'BTC-USD':['quote-btc','quote-btc-time'],'ETH-USD':['quote-eth','quote-eth-time']};
+ for(const [symbol,[valueId,timeId]]of Object.entries(map)){
+   const x=data.quotes.find(q=>q.symbol===symbol&&q.quote_status==='recent_exchange_trade_snapshot'&&q.source==='Coinbase Exchange public ticker');
+   if(x){
+     $(valueId).textContent=format(x.last_trade_price);
+     const when=new Date(x.observed_at);
+     $(timeId).textContent='Coinbase Exchange · last trade '+(Number.isNaN(when.getTime())?'time unknown':when.toLocaleTimeString())+
+      ' · '+String(x.age_seconds)+'s old when retrieved';
+   }else{
+     $(valueId).textContent='Unavailable';
+     $(timeId).textContent='No recent verified exchange trade from this source';
+   }
+ }
+ const count=data.quotes.length;
+ $('terminal-quote-status').textContent=count+'/2 recent Coinbase Exchange trade snapshots · checked '+
+   new Date(data.retrieved_at).toLocaleTimeString()+
+   ' · on-demand refresh, not a continuous real-time stream.';
+ quoteLastLoaded=Date.now();
+}
+async function loadCurrentQuotes(){
+ if(document.body.classList.contains('access-locked'))return;
+ const request=++quoteRequestId;
+ $('terminal-quote-status').textContent='Checking recent exchange trades…';
+ try{
+  const token=await researchToken();
+  const data=await researchFetch('/api/research/quotes',token);
+  if(request!==quoteRequestId||document.body.classList.contains('access-locked'))return;
+  quoteRender(data);
+ }catch(error){
+  if(request!==quoteRequestId||document.body.classList.contains('access-locked'))return;
+  $('terminal-quote-status').textContent='Current quotes unavailable: '+(error?.message||'Provider/network issue')+
+     '. Showing no fabricated fallback prices.';
+  for(const id of ['quote-btc','quote-eth'])$(id).textContent='Unavailable';
+  for(const id of ['quote-btc-time','quote-eth-time'])$(id).textContent='Current price not verified';
+ }
+}
+$('terminal-quote-refresh').addEventListener('click',()=>{void loadCurrentQuotes();});
+// Refresh while visible and signed in. No provider calls while locked/hidden.
+setInterval(()=>{if(!document.hidden&&!document.body.classList.contains('access-locked')&&
+  Date.now()-quoteLastLoaded>=60000)void loadCurrentQuotes();},60000);
+
 let terminalRequestId=0;
 function terminalEmptyRow(tbody,columns,message){
  const tr=document.createElement('tr'),td=document.createElement('td');
@@ -733,7 +830,7 @@ async function refresh(){
      if(previous&&(previous.blocked||previous.user===identity&&sessionExpired(previous,n))){await signOut('Session expired. Sign in and verify 2FA again.');return;}
      saveBoundary(previous&&previous.user===identity?previous:{user:identity,started:n,last:n});
      activeSessionId=identity;document.body.classList.remove('access-locked');checkSession();
-     $('api-result').textContent='Verified backend connection.';void loadResearch();void loadAutonomy();void loadOwnerTerminal();
+     $('api-result').textContent='Verified backend connection.';void loadResearch();void loadAutonomy();void loadOwnerTerminal();void loadCurrentQuotes();loadTradingView();
    }else{$('api-result').textContent='Access locked: '+(body.detail||('API HTTP '+r.status));}}
    catch(e){$('api-result').textContent='Access locked: secure API unavailable ('+(e?.message||'network error')+').';}
    return;
