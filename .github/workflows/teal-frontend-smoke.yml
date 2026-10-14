@@ -21,10 +21,15 @@ jobs:
           from pathlib import Path
           import re
           html=Path('index.html').read_text()
-          match=re.search(r'<script type="module">([\s\S]*?)</script>',html)
-          assert match, 'Missing dashboard module'
-          js=match.group(1)
+          assert '<script type="module" src="./terminal.mjs"></script>' in html, 'Missing local JS module'
+          js=Path('terminal.mjs').read_text()
           Path('/tmp/teal-login.mjs').write_text(js)
+          assert 'Content-Security-Policy' in html, 'No browser CSP'
+          assert "script-src 'self'" in html, 'Scripts must require an allowlist'
+          assert "'unsafe-eval'" not in html, 'No eval permitted'
+          assert "storage:window.sessionStorage" in js, 'Avoid long-lived browser token storage'
+          assert '@supabase/supabase-js@2.76.1' in js, 'Pin auth SDK version'
+          assert '@supabase/supabase-js@2/+' not in js, 'Unpinned fallback SDK'
           assert "googleButton.disabled=false" in js
           assert "cdn.jsdelivr.net" in js
           assert "signInWithOAuth" in js
