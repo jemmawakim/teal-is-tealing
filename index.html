@@ -226,7 +226,71 @@ body:not(.access-locked) footer.mobile{display:none}
  .workspace-identity .crumb{font-size:10px}
 }
 
-</style></head><body class="access-locked"><div id="access-gate" role="main" style="max-width:550px;margin:clamp(30px,9vh,120px) auto;padding:16px"><div class="login-brand">teal.</div><p class="login-tagline">teal is tealing</p><section class="card" id="security" style="margin-bottom:16px"><div class="card-head"><h2>🔐 Secure access</h2><span class="tag" id="auth-state">Signed out</span></div><p class="muted" id="auth-message">Enter your authenticator code to finish signing in. Trading remains disabled.</p><div id="login-fields" style="display:grid;gap:9px;max-width:450px"><button class="btn primary" id="teal-google" type="button">Continue with Google</button></div><form id="mfa-fields" hidden novalidate><p id="mfa-instructions"></p><div id="mfa-qr"></div><label for="teal-mfa-code" style="display:block;font-weight:700;margin:10px 0 7px">Authenticator code</label><input id="teal-mfa-code" name="totp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required aria-describedby="mfa-instructions" placeholder="6-digit code" style="padding:13px;border:1px solid #c9cbd0;border-radius:7px"><button class="btn primary" id="teal-verify" type="submit">Verify 2FA</button></form><button class="btn" id="teal-logout" type="button" hidden>Sign out</button><p class="notice" id="api-result">No portfolio data will appear without a verified owner session with 2FA.</p></section></div><div class="app"><main class="main" id="overview"><div class="topbar"><div class="workspace-identity"><span class="app-wordmark">teal.</span><span class="app-tagline">teal is tealing</span><span class="crumb">Workspace <span aria-hidden="true">/</span> Paper research · Build B-20261014.2</span></div><div class="top-right"><span class="status">● Trading offline</span><span id="session-remaining" class="crumb" aria-live="off">Session active</span><button class="btn" id="teal-logout-dashboard" type="button" style="padding:9px 13px">Sign out</button><div class="avatar" title="Authenticated owner" aria-label="Owner profile">T</div></div></div><section class="card" id="research-workspace" aria-labelledby="research-title" style="margin:22px 0">
+/* Owner terminal: neutral system surfaces, protected data, responsive layout */
+.teal-terminal{margin:6px 0 24px}
+.terminal-header{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:14px}
+.terminal-header h1{font-family:'Space Grotesk','DM Sans',Arial,sans-serif;font-size:clamp(27px,3.4vw,39px);letter-spacing:-1.35px;margin:5px 0 6px;color:#242424}
+.terminal-header p{font-size:12px;line-height:1.6;margin:0;max-width:630px}
+.terminal-message{color:#555961;background:#ededee;border:1px solid #e1e1e4;font-size:12px;
+  padding:12px 15px;border-radius:8px;line-height:1.5;margin:0 0 14px}
+.terminal-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.terminal-kpi{padding:19px 19px 17px}
+.terminal-kpi span{color:#686b71;font-size:11px;font-weight:650;display:block}
+.terminal-kpi strong{font-family:'Space Grotesk','DM Sans',Arial,sans-serif;font-size:32px;letter-spacing:-1px;
+  color:#292b2d;display:block;margin:9px 0 7px}
+.terminal-kpi small{font-size:10px;color:#85888e}
+.terminal-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(285px,1fr);gap:12px}
+.terminal-section{min-width:0}
+.terminal-section .card-head{margin-bottom:15px}
+.terminal-section a{color:#474c51;text-decoration:underline;text-decoration-color:#b3b5ba;text-underline-offset:2px}
+.terminal-section a:hover{color:#191a1c}
+.terminal-section td{padding:13px 9px 13px 5px;vertical-align:top}
+.terminal-section th{padding:9px 8px 10px 5px}
+.terminal-stack{display:grid;gap:9px}
+.terminal-item{padding:12px 13px;border-radius:7px;border:1px solid #ededee;background:#fafafa;min-width:0}
+.terminal-item-title{font-size:12px;font-weight:700;line-height:1.5;overflow-wrap:anywhere}
+.terminal-item-sub{font-size:11px;color:#73767e;margin-top:6px;line-height:1.5}
+.terminal-item p{font-size:11px;color:#686b72;line-height:1.6;margin:7px 0 0}
+.terminal-risk{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.terminal-risk>div{display:flex;flex-direction:column;gap:8px;padding:13px;background:#f7f7f8;border:1px solid #ededee;border-radius:7px}
+.terminal-risk span{font-size:11px}
+.terminal-risk strong{color:#303236;font-size:16px;overflow-wrap:anywhere}
+.terminal-health-row{display:flex;align-items:center;justify-content:space-between;gap:8px;
+ padding:8px 0;border-bottom:1px solid #ebebed;font-size:11px}
+.terminal-health-row>span:last-child{font-weight:650;color:#666971}
+.terminal-section .muted{font-size:12px;line-height:1.6}
+@media(max-width:1050px){.terminal-grid{grid-template-columns:1fr}}
+@media(max-width:760px){
+ .terminal-header{align-items:stretch;flex-direction:column;gap:13px}
+ .terminal-header #terminal-refresh{width:100%}
+ .terminal-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .terminal-kpi{padding:15px}
+ .terminal-kpi strong{font-size:28px}
+ .terminal-grid{grid-template-columns:1fr}
+}
+@media(max-width:350px){.terminal-kpis{grid-template-columns:1fr}}
+</style></head><body class="access-locked"><div id="access-gate" role="main" style="max-width:550px;margin:clamp(30px,9vh,120px) auto;padding:16px"><div class="login-brand">teal.</div><p class="login-tagline">teal is tealing</p><section class="card" id="security" style="margin-bottom:16px"><div class="card-head"><h2>🔐 Secure access</h2><span class="tag" id="auth-state">Signed out</span></div><p class="muted" id="auth-message">Enter your authenticator code to finish signing in. Trading remains disabled.</p><div id="login-fields" style="display:grid;gap:9px;max-width:450px"><button class="btn primary" id="teal-google" type="button">Continue with Google</button></div><form id="mfa-fields" hidden novalidate><p id="mfa-instructions"></p><div id="mfa-qr"></div><label for="teal-mfa-code" style="display:block;font-weight:700;margin:10px 0 7px">Authenticator code</label><input id="teal-mfa-code" name="totp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required aria-describedby="mfa-instructions" placeholder="6-digit code" style="padding:13px;border:1px solid #c9cbd0;border-radius:7px"><button class="btn primary" id="teal-verify" type="submit">Verify 2FA</button></form><button class="btn" id="teal-logout" type="button" hidden>Sign out</button><p class="notice" id="api-result">No portfolio data will appear without a verified owner session with 2FA.</p></section></div><div class="app"><main class="main" id="overview"><div class="topbar"><div class="workspace-identity"><span class="app-wordmark">teal.</span><span class="app-tagline">teal is tealing</span><span class="crumb">Workspace <span aria-hidden="true">/</span> Paper research · Build B-20261014.2</span></div><div class="top-right"><span class="status">● Trading offline</span><span id="session-remaining" class="crumb" aria-live="off">Session active</span><button class="btn" id="teal-logout-dashboard" type="button" style="padding:9px 13px">Sign out</button><div class="avatar" title="Authenticated owner" aria-label="Owner profile">T</div></div></div><section class="teal-terminal" id="teal-terminal" aria-labelledby="terminal-title">
+<div class="card-head terminal-header">
+<div><div class="eyebrow">PRIVATE INTELLIGENCE · PAPER ONLY</div><h1 id="terminal-title">Teal Terminal</h1><p class="muted">Attributed research, historical market context, and prospective experiments. Nothing here is a trading instruction.</p></div>
+<button type="button" class="btn primary" id="terminal-refresh">Refresh intelligence</button>
+</div>
+<p class="terminal-message" id="terminal-status" role="status" aria-live="polite">Unlock your owner session to load private research.</p>
+<div class="terminal-kpis" aria-label="Research summary">
+<div class="card terminal-kpi"><span>Publications examined</span><strong id="terminal-publications">—</strong><small>Official-source archive</small></div>
+<div class="card terminal-kpi"><span>Market datasets</span><strong id="terminal-market-count">—</strong><small>Delayed daily data</small></div>
+<div class="card terminal-kpi"><span>Prospective forecasts</span><strong id="terminal-forecast-count">—</strong><small>Experimental + baselines</small></div>
+<div class="card terminal-kpi"><span>Outcomes evaluated</span><strong id="terminal-scored-count">—</strong><small>Future results only</small></div>
+</div>
+<div class="terminal-grid">
+<section class="card terminal-section" aria-labelledby="terminal-market-heading"><div class="card-head"><h2 id="terminal-market-heading">Market watchlist</h2><span class="tag">Historical, not live</span></div><div class="tablewrap"><table><thead><tr><th>Asset</th><th>Last observed</th><th>5-session change</th><th>Source</th></tr></thead><tbody id="terminal-market-rows"><tr><td class="empty" colspan="4">Waiting for secured data.</td></tr></tbody></table></div></section>
+<section class="card terminal-section" aria-labelledby="terminal-risk-heading"><div class="card-head"><h2 id="terminal-risk-heading">Paper portfolio & risk</h2><span class="tag">No brokerage</span></div><div class="terminal-risk"><div><span class="muted">Actual positions</span><strong>0</strong></div><div><span class="muted">Evaluated paper scenarios</span><strong id="terminal-paper-cases">—</strong></div><div><span class="muted">Directional accuracy</span><strong id="terminal-accuracy">—</strong></div><div><span class="muted">Estimated performance</span><strong id="terminal-performance">Awaiting evidence</strong></div></div><p class="notice">Hypothetical estimates use assumed fees and slippage. No simulated outcome is an executed trade or proven return.</p></section>
+<section class="card terminal-section" aria-labelledby="terminal-news-heading"><div class="card-head"><h2 id="terminal-news-heading">Research investigations</h2><span class="tag">Evidence review</span></div><div id="terminal-investigations" class="terminal-stack"><p class="muted">Research findings will appear after secure access.</p></div></section>
+<section class="card terminal-section" aria-labelledby="terminal-pred-heading"><div class="card-head"><h2 id="terminal-pred-heading">Prediction center</h2><span class="tag">Uncalibrated models</span></div><div class="tablewrap"><table><thead><tr><th>Market</th><th>Forecast</th><th>Recorded</th><th>Outcome</th></tr></thead><tbody id="terminal-predictions"><tr><td class="empty" colspan="4">No authenticated predictions loaded.</td></tr></tbody></table></div></section>
+<section class="card terminal-section" aria-labelledby="terminal-alert-heading"><div class="card-head"><h2 id="terminal-alert-heading">Publication alerts</h2><span class="tag">Not price signals</span></div><div id="terminal-alerts" class="terminal-stack"><p class="muted">Waiting for authenticated alerts.</p></div></section>
+<section class="card terminal-section" aria-labelledby="terminal-health-heading"><div class="card-head"><h2 id="terminal-health-heading">Source health & data limits</h2><span class="tag">Provenance first</span></div><div id="terminal-sources" class="terminal-stack"><p class="muted">Source health is unavailable until login.</p></div><p class="tiny">Daily closes can be delayed, unavailable or revised. News publications do not establish market causality.</p></section>
+</div>
+<p class="tiny" id="terminal-provenance">Private snapshot refreshed after source ingestion. The dashboard never contacts private GitHub directly.</p>
+</section><section class="card" id="research-workspace" aria-labelledby="research-title" style="margin:22px 0">
 <div class="card-head"><h2 id="research-title">Research workspace</h2><span class="tag">Owner MFA · Paper only</span></div>
 <p class="muted">Your secured research journal, paper experiments and audit integrity. This view loads only after verified Google sign-in and MFA.</p>
 <div class="stats" style="margin:18px 0">
@@ -308,7 +372,7 @@ const boundary=()=>{try {return JSON.parse(window.localStorage.getItem(SESSION_K
 function saveBoundary(value){try{if(value)window.localStorage.setItem(SESSION_KEY,JSON.stringify(value));else window.localStorage.removeItem(SESSION_KEY);}catch{}}
 function revokeBoundary(){saveBoundary({blocked:true,started:0,last:0});}
 function sessionExpired(b,now=Date.now()){return !b||!Number.isFinite(b.started)||!Number.isFinite(b.last)||now-b.started>SESSION_MS||b.last>now+60000||b.started>now+60000;}
-function lock(){authRevision++;document.body.classList.add('access-locked');if($('research-table'))researchReset();if($('autonomy-news'))autonomyReset();}
+function lock(){authRevision++;document.body.classList.add('access-locked');if($('research-table'))researchReset();if($('autonomy-news'))autonomyReset();if($('terminal-status'))terminalReset();}
 async function signOut(reason='Signed out.'){
  if(signingOut)return;
  signingOut=true;lock();revokeBoundary();activeSessionId=null;
@@ -462,6 +526,125 @@ $('judgment-form').addEventListener('submit',async event=>{
  }catch(error){status.textContent='Judgment unavailable: '+(error?.message||'Unknown error');}
  finally{button.disabled=false;}
 });
+
+// Protected owner intelligence terminal. No public/private GitHub fetches from browser.
+let terminalRequestId=0;
+function terminalEmptyRow(tbody,columns,message){
+ const tr=document.createElement('tr'),td=document.createElement('td');
+ td.colSpan=columns;td.className='empty';td.textContent=message;tr.appendChild(td);
+ tbody.replaceChildren(tr);
+}
+function terminalReset(note='Sign in with 2FA to load private intelligence.'){
+ terminalRequestId++;
+ $('terminal-status').textContent=note;
+ for(const id of ['terminal-publications','terminal-market-count','terminal-forecast-count','terminal-scored-count','terminal-paper-cases','terminal-accuracy'])$(id).textContent='—';
+ $('terminal-performance').textContent='Awaiting evidence';
+ terminalEmptyRow($('terminal-market-rows'),4,'Secured market data not loaded.');
+ terminalEmptyRow($('terminal-predictions'),4,'Secured predictions not loaded.');
+ for(const id of ['terminal-investigations','terminal-alerts','terminal-sources'])$(id).replaceChildren();
+ $('terminal-provenance').textContent='No private research is retained in this page after the session is locked.';
+}
+function terminalLine(parent,main,sub,description,href){
+ const box=document.createElement('div');box.className='terminal-item';
+ const title=document.createElement('div');title.className='terminal-item-title';
+ if(typeof href==='string'&&/^https:\/\//.test(href)){
+   const link=document.createElement('a');link.href=href;link.target='_blank';link.rel='noopener noreferrer';link.textContent=String(main||'Untitled');title.append(link);
+ }else{title.textContent=String(main||'Untitled');}
+ box.append(title);
+ if(sub){const note=document.createElement('div');note.className='terminal-item-sub';note.textContent=String(sub);box.append(note);}
+ if(description){const p=document.createElement('p');p.textContent=String(description);box.append(p);}
+ parent.append(box);
+}
+function terminalTextCell(row,text){
+ const cell=document.createElement('td');cell.textContent=String(text??'—');row.append(cell);return cell;
+}
+const terminalDate=v=>{const d=new Date(v);return Number.isNaN(d.getTime())?'Unknown':d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});};
+function terminalDisplay(data){
+ if(!data||data.schema!==1||data.mode!=='owner_paper_research'||data.paper_only!==true||
+   data.live_trading_enabled!==false||data.broker_connected!==false||
+   !Array.isArray(data.assets)||!Array.isArray(data.research_events)||!Array.isArray(data.predictions)||
+   !Array.isArray(data.alerts)||!data.overview)throw Error('Unexpected private research format. Nothing was displayed.');
+ const counts=data.overview;
+ $('terminal-publications').textContent=String(counts.publications??0);
+ $('terminal-market-count').textContent=String(counts.market_series??data.assets.length);
+ $('terminal-forecast-count').textContent=String(counts.forecasts??0);
+ $('terminal-scored-count').textContent=String(counts.scored??0);
+ const fetched=new Date(data.generated_at);
+ const stale=Number.isFinite(fetched.getTime())&&(Date.now()-fetched.getTime())>3*3600*1000;
+ $('terminal-status').textContent=(stale?'STALE SNAPSHOT. ':'')+'Owner-only research · Updated '+terminalDate(data.generated_at)+
+   (stale?' · Data may no longer be current.':' · Research and historical prices only.');
+ const market=$('terminal-market-rows');market.replaceChildren();
+ for(const item of data.assets.slice(0,25)){
+   const tr=document.createElement('tr');terminalTextCell(tr,String(item.id||'—').replaceAll('_',' '));
+   terminalTextCell(tr,item.last_daily_observation===null?'—':String(item.last_daily_observation)+' · '+String(item.as_of||''));
+   const pct=item.five_session_return_pct;
+   terminalTextCell(tr,typeof pct==='number'&&Number.isFinite(pct)?pct.toFixed(2)+'%':'—');
+   const td=terminalTextCell(tr,item.source||'Unverified source');
+   if(typeof item.source_url==='string'&&item.source_url.startsWith('https://')){
+     td.replaceChildren();const a=document.createElement('a');a.href=item.source_url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='View source';td.append(a);
+   }
+   market.append(tr);
+ }
+ if(!data.assets.length)terminalEmptyRow(market,4,'No validated historical observations available.');
+ const findings=$('terminal-investigations');findings.replaceChildren();
+ for(const e of data.research_events.slice(0,8)){
+  const sub=[e.source,terminalDate(e.published_at),'Judgment: '+String(e.judgment||'unverified')].join(' · ');
+  const context=e.watch_assets?.length?'Assets to investigate: '+e.watch_assets.join(', '):'No verified instrument link';
+  terminalLine(findings,e.title,sub,context,e.url);
+ }
+ if(!data.research_events.length)terminalLine(findings,'No source-confirmed investigations yet','Waiting for official releases','Teal will not invent market findings.');
+ const forecasts=$('terminal-predictions');forecasts.replaceChildren();
+ for(const p of [...data.predictions].reverse().slice(0,15)){
+  const tr=document.createElement('tr');terminalTextCell(tr,String(p.series_id||'unknown').replaceAll('_',' '));
+  terminalTextCell(tr,(p.prediction_type==='zero_return_baseline'?'No-change benchmark':String(p.direction||'unknown').toUpperCase())+' · '+String(p.model_version||'unverified').replaceAll('_',' '));
+  terminalTextCell(tr,terminalDate(p.created_at));
+  terminalTextCell(tr,p.status==='observed'&&p.outcome?
+    'Observed '+String(p.outcome.observed_direction||'?')+' · '+terminalDate(p.outcome.outcome_date):
+    'Pending · '+String(p.horizon_sessions||1)+' session horizon');
+  forecasts.append(tr);
+ }
+ if(!data.predictions.length)terminalEmptyRow(forecasts,4,'No pre-registered forecasts yet.');
+ const review=$('terminal-paper-cases'),performance=data.paper_evaluation||{};
+ review.textContent=String(performance.evaluated_hypothetical_cases??0);
+ const accuracy=performance.direction_accuracy;
+ $('terminal-accuracy').textContent=typeof accuracy==='number'&&Number.isFinite(accuracy)?(100*accuracy).toFixed(1)+'%':'Not established';
+ const returns=performance.average_hypothetical_net_pct;
+ $('terminal-performance').textContent=typeof returns==='number'&&Number.isFinite(returns)?
+    returns.toFixed(2)+'% hypothetical':'Awaiting observations';
+ const alerts=$('terminal-alerts');alerts.replaceChildren();
+ for(const alert of data.alerts.slice(0,6)){
+  terminalLine(alerts,alert.headline||'Publication alert',
+    [alert.priority||'normal',alert.source||'',terminalDate(alert.published_at)].join(' · '),
+    'Publication detected, market impact unverified.',alert.source_url);
+ }
+ if(!data.alerts.length)terminalLine(alerts,'No new publication alerts','Only new items after the initial archive','Historical events do not generate repeated notifications.');
+ const sources=$('terminal-sources');sources.replaceChildren();
+ for(const [name,v] of Object.entries(data.source_health||{})){
+  const row=document.createElement('div');row.className='terminal-health-row';
+  const label=document.createElement('span');label.textContent=name;
+  const status=document.createElement('span');status.textContent=String(v.status||'unknown');
+  row.append(label,status);sources.append(row);
+ }
+ if(!sources.childNodes.length)terminalLine(sources,'Source health unavailable','No verified ingestion status','');
+ $('terminal-provenance').textContent='Private evidence fingerprint: '+String(data.evidence_sha256||'unavailable').slice(0,16)+
+  ' · Source check: '+terminalDate(data.source_checked_at)+' · Delayed, unadjusted prices; no verified market causality.';
+}
+async function loadOwnerTerminal(){
+ const request=++terminalRequestId;
+ $('terminal-status').textContent='Loading owner-only market intelligence…';
+ try{
+  const token=await researchToken();
+  const data=await researchFetch('/api/research/terminal',token);
+  if(request!==terminalRequestId||document.body.classList.contains('access-locked'))return;
+  terminalDisplay(data);
+ }catch(error){
+  if(request!==terminalRequestId)return;
+  terminalReset('Private intelligence unavailable: '+(error?.message||'Research connection could not be established')+
+    '. The journal and other authenticated tools can still be used.');
+ }
+}
+$('terminal-refresh').addEventListener('click',()=>{void loadOwnerTerminal();});
+
 let autonomyRequestId=0;
 function autonomyReset(){
  autonomyRequestId++;
@@ -550,7 +733,7 @@ async function refresh(){
      if(previous&&(previous.blocked||previous.user===identity&&sessionExpired(previous,n))){await signOut('Session expired. Sign in and verify 2FA again.');return;}
      saveBoundary(previous&&previous.user===identity?previous:{user:identity,started:n,last:n});
      activeSessionId=identity;document.body.classList.remove('access-locked');checkSession();
-     $('api-result').textContent='Verified backend connection.';void loadResearch();void loadAutonomy();
+     $('api-result').textContent='Verified backend connection.';void loadResearch();void loadAutonomy();void loadOwnerTerminal();
    }else{$('api-result').textContent='Access locked: '+(body.detail||('API HTTP '+r.status));}}
    catch(e){$('api-result').textContent='Access locked: secure API unavailable ('+(e?.message||'network error')+').';}
    return;

@@ -29,6 +29,14 @@ jobs:
           assert "cdn.jsdelivr.net" in js
           assert "signInWithOAuth" in js
           assert "loadAutonomy" in js
+          assert "loadOwnerTerminal" in js
+          assert "terminalReset()" in js
+          assert "research/terminal" in js
+          assert "teal-terminal" in html
+          assert "terminal-market-rows" in html
+          assert "terminal-predictions" in html
+          assert "terminal-paper-cases" in html
+          assert "api.github.com" not in html, "Private GitHub must not be called from public HTML"
           assert "research/autonomy" in html or "autonomy-workspace" in html
           print("Dashboard module and auth wiring found")
           PY
