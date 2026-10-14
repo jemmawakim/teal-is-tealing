@@ -244,7 +244,7 @@ function checkSession(){
  const b=boundary();
  if(sessionExpired(b)){void signOut('Session expired. Sign in and verify 2FA again.');return;}
  const remaining=Math.max(0,Math.ceil((b.started+SESSION_MS-Date.now())/60000));
- $('session-remaining').textContent='Testing session: '+(remaining>=60?Math.ceil(remaining/60)+' h':remaining+' min')+' left'';
+ $('session-remaining').textContent='Testing session: '+(remaining>=60?Math.ceil(remaining/60)+' h':remaining+' min')+' left';
 }
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){checkSession();}});
 window.addEventListener('storage',event=>{if(event.key===SESSION_KEY){checkSession();if(!event.newValue)lock();}});
