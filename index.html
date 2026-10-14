@@ -570,7 +570,7 @@ function terminalDisplay(data){
  $('terminal-forecast-count').textContent=String(counts.forecasts??0);
  $('terminal-scored-count').textContent=String(counts.scored??0);
  const fetched=new Date(data.generated_at);
- const stale=Number.isFinite(fetched.getTime())&&(Date.now()-fetched.getTime())>3*3600*1000;
+ const stale=Number.isFinite(fetched.getTime())&&(Date.now()-fetched.getTime())>6*3600*1000;
  $('terminal-status').textContent=(stale?'STALE SNAPSHOT. ':'')+'Owner-only research · Updated '+terminalDate(data.generated_at)+
    (stale?' · Data may no longer be current.':' · Research and historical prices only.');
  const market=$('terminal-market-rows');market.replaceChildren();
