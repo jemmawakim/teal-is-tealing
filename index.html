@@ -186,6 +186,28 @@ input::placeholder{color:#9caeae}
 <div class="tablewrap"><table><thead><tr><th>Experiment</th><th>Hypothesis</th><th>Net return</th><th>Drawdown</th><th>Paper review</th></tr></thead>
 <tbody id="research-table"><tr><td colspan="5" class="empty">Waiting for authenticated research data.</td></tr></tbody></table></div>
 <p class="tiny">No broker connections, live market orders or production trading. Empty history means no research has been persisted yet.</p>
+</section><section class="card" id="judgment-lab" style="margin:18px 0" aria-labelledby="judgment-title">
+<div class="card-head"><h2 id="judgment-title">Teal Judgment Lab</h2><span class="tag">Live API · Hypothetical cases only</span></div>
+<p class="muted">Enter a hypothetical market event and its evidence. Teal will evaluate credibility, uncertainty, contradictory sources, sample strength and costs. It will never place a trade.</p>
+<form id="judgment-form" style="display:grid;gap:12px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+<label>Event type<select name="event_type" required><option value="inflation">Inflation</option><option value="rates">Interest rates</option><option value="employment">Employment</option><option value="earnings">Earnings</option><option value="geopolitics">Geopolitics</option><option value="other">Other</option></select></label>
+<label>Surprise vs. expectation (%)<input name="surprise_pct" type="number" step="any" min="-100" max="100" value="0.8" required></label>
+<label>Market price change (%)<input name="price_change_pct" type="number" step="any" min="-50" max="50" value="-1.2" required></label>
+<label>Volume vs. normal (ratio)<input name="volume_ratio" type="number" step="any" min="0" max="100" value="1.7" required></label>
+<label>Independent sources<input name="source_count" type="number" step="1" min="0" max="100" value="3" required></label>
+<label>Conflicting sources<input name="conflicting_sources" type="number" step="1" min="0" max="100" value="0" required></label>
+<label>Minutes since event<input name="minutes_since_event" type="number" step="any" min="0" max="10080" value="30" required></label>
+<label>Historical cases<input name="historical_cases" type="number" step="1" min="0" max="100000" value="100" required></label>
+<label>Historically successful cases<input name="historical_successes" type="number" step="1" min="0" max="100000" value="75" required></label>
+<label>Estimated transaction costs (bps)<input name="estimated_cost_bps" type="number" step="any" min="0" max="1000" value="5" required></label>
+<label>Risk budget (%)<input name="risk_budget_pct" type="number" step="any" min="0" max="100" value="1" required></label>
+</div>
+<button class="btn primary" id="judgment-run" type="submit">Evaluate hypothetical case</button>
+</form>
+<p class="notice" id="judgment-status" role="status">Sign in with MFA to test Teal's judgment.</p>
+<div id="judgment-output" style="display:grid;gap:10px;margin-top:12px"></div>
+<p class="tiny">The engine is a transparent, deterministic prototype. Inputs are not independently verified. A positive result means investigate further, not buy or sell.</p>
 </section><section class="card" id="autonomy-workspace" style="margin:18px 0" aria-labelledby="autonomy-title">
 <div class="card-head"><h2 id="autonomy-title">Autonomous research · First live cycle</h2><span class="tag">Paper research · Read-only snapshot</span></div>
 <p class="muted">Teal collected source-attributed Federal Reserve news and generated questions to test. This is a deployed snapshot, not a live trading feed.</p>
@@ -346,6 +368,42 @@ async function verifyResearch(){
   $('research-status').textContent='Audit check unavailable: '+(e?.message||'Network error');
  }
 }
+$('judgment-form').addEventListener('submit',async event=>{
+ event.preventDefault();
+ const button=$('judgment-run'),status=$('judgment-status'),output=$('judgment-output');
+ button.disabled=true;status.textContent='Evaluating evidence and uncertainty…';output.replaceChildren();
+ try{
+  const form=new FormData(event.currentTarget);
+  const fields=['surprise_pct','price_change_pct','volume_ratio','source_count','conflicting_sources',
+   'minutes_since_event','historical_cases','historical_successes','estimated_cost_bps','risk_budget_pct'];
+  const data={event_type:form.get('event_type')};
+  for(const field of fields)data[field]=Number(form.get(field));
+  const token=await researchToken();
+  const response=await fetch(RESEARCH_API+'/api/research/judge',{
+   method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},
+   body:JSON.stringify(data),cache:'no-store',signal:AbortSignal.timeout(15000)});
+  const result=await response.json();
+  if(!response.ok)throw Error(result.detail||'Judgment service HTTP '+response.status);
+  if(result.paper_only!==true||result.live_trading_enabled!==false)throw Error('Unsafe response');
+  const headline=document.createElement('h3');headline.textContent='Judgment: '+result.decision.replaceAll('_',' ');
+  output.append(headline);
+  const summary=document.createElement('p');summary.textContent=result.analysis;output.append(summary);
+  const line=document.createElement('p');
+  line.textContent='Evidence quality: '+result.evidence_quality+' · Confidence: '+result.confidence+
+   ' · Historical success lower bound: '+(result.wilson_95_lower_success_rate===null?'unavailable':(100*result.wilson_95_lower_success_rate).toFixed(1)+'%');
+  output.append(line);
+  for(const [label,values] of [['Reasons',result.reasons],['Cautions',result.cautions],['Next tests',result.next_tests],['Limitations',result.limitations]]){
+   if(!values?.length)continue;
+   const box=document.createElement('div');box.className='card';
+   const title=document.createElement('strong');title.textContent=label;box.append(title);
+   const list=document.createElement('ul');
+   for(const value of values){const item=document.createElement('li');item.textContent=value.replaceAll('_',' ');list.append(item);}
+   box.append(list);output.append(box);
+  }
+  status.textContent='Evaluation completed · Hypothetical evidence only · No trading.';
+ }catch(error){status.textContent='Judgment unavailable: '+(error?.message||'Unknown error');}
+ finally{button.disabled=false;}
+});
 let autonomyRequestId=0;
 function autonomyReset(){
  autonomyRequestId++;
