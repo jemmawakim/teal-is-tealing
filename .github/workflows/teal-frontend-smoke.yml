@@ -1,5 +1,7 @@
 name: Teal Frontend JavaScript Smoke
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
     paths: ['index.html','terminal.mjs','.github/workflows/teal-frontend-smoke.yml']
