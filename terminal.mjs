@@ -333,9 +333,23 @@ function terminalDisplay(data){
   const tr=document.createElement('tr');terminalTextCell(tr,String(p.series_id||'unknown').replaceAll('_',' '));
   terminalTextCell(tr,(p.prediction_type==='zero_return_baseline'?'No-change benchmark':String(p.direction||'unknown').toUpperCase())+' · '+String(p.model_version||'unverified').replaceAll('_',' '));
   terminalTextCell(tr,terminalDate(p.created_at));
-  terminalTextCell(tr,p.status==='observed'&&p.outcome?
-    'Observed '+String(p.outcome.observed_direction||'?')+' · '+terminalDate(p.outcome.outcome_date):
-    'Pending · '+String(p.horizon_sessions||1)+' session horizon');
+  let outcomeLabel;
+  if(p.status==='observed'&&p.outcome){
+    const verdict=p.prediction_type==='zero_return_baseline'?'Benchmark observed':
+      p.outcome.direction_matched===true?'Direction correct':
+      p.outcome.direction_matched===false?'Direction incorrect':'Outcome observed';
+    outcomeLabel=verdict+' · '+String(p.outcome.observed_direction||'?').toUpperCase()+
+      ' · '+terminalDate(p.outcome.outcome_date)+' close';
+  }else if(p.status==='unverifiable_baseline'){
+    outcomeLabel='Unverifiable · starting price was not pre-recorded';
+  }else if(p.status==='pending'){
+    outcomeLabel='Pending · waiting for completed '+String(p.horizon_sessions||1)+
+      '-session daily close'+(p.earliest_eligible_session_date?
+      ' · earliest '+String(p.earliest_eligible_session_date):'');
+  }else{
+    outcomeLabel='Not evaluated · '+String(p.status||'unknown');
+  }
+  terminalTextCell(tr,outcomeLabel);
   forecasts.append(tr);
  }
  if(!data.predictions.length)terminalEmptyRow(forecasts,4,'No pre-registered forecasts yet.');
