@@ -56,10 +56,18 @@ $('teal-security-test').onclick=async()=>{
    if(document.body.classList.contains('access-locked'))throw Error('Session expired. Please sign in again.');
    const {data:{session}}=await sb.auth.getSession();
    if(!session?.access_token)throw Error('Sign in again before running the test.');
-   const res=await fetch('https://teal-secure-api.vercel.app/api/security/self-test',{method:'POST',headers:{Authorization:'Bearer '+session.access_token,'Content-Type':'application/json'},cache:'no-store'});
+   const assurance=await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+   if(assurance.error||assurance.data?.currentLevel!=='aal2')
+     throw Error('TOTP assurance has not been verified.');
+   const local=boundary();
+   if(local?.blocked||sessionExpired(local)||local.user!==session.user?.id)
+     throw Error('Owner session expired. Sign in and verify 2FA again.');
+   const res=await fetch('https://teal-secure-api.vercel.app/api/security/self-test',{method:'POST',
+     headers:{Authorization:'Bearer '+session.access_token,'Content-Type':'application/json'},
+     cache:'no-store',signal:AbortSignal.timeout(15000)});
    const data=await res.json();
-   if(res.ok&&data.passed===true&&data.signature_accepted===true&&data.replay_rejected===true&&data.broker_used===false){
-     out.textContent='PASS: valid signature accepted once, replay rejected. No broker used.';
+   if(res.ok&&data.passed===true&&data.signature_accepted===true&&data.replay_rejected===true&&data.broker_used===false&&data.trading_enabled===false){
+     out.textContent='PASS: owner session, TOTP AAL2, server session gate, signed approval, replay denial and broker isolation.';
    }else{
      out.textContent='NOT PASSED: '+(data.detail||('HTTP '+res.status))+'. No trading enabled.';
    }
