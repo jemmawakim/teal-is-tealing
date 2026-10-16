@@ -273,9 +273,12 @@ function terminalReset(note='Sign in with 2FA to load private intelligence.'){
  terminalRequestId++;
  $('terminal-status').textContent=note;
  for(const id of ['terminal-publications','terminal-market-count','terminal-forecast-count','terminal-scored-count','terminal-paper-cases','terminal-accuracy'])$(id).textContent='—';
+ for(const id of ['terminal-daytrade-count','terminal-daytrade-observed','terminal-daytrade-pending'])$(id).textContent='—';
+ $('terminal-daytrade-health').textContent='Intraday feed status available after owner MFA.';
  $('terminal-performance').textContent='Awaiting evidence';
  terminalEmptyRow($('terminal-market-rows'),4,'Secured market data not loaded.');
  terminalEmptyRow($('terminal-predictions'),4,'Secured predictions not loaded.');
+ terminalEmptyRow($('terminal-daytrade-rows'),5,'Secured intraday research not loaded.');
  for(const id of ['terminal-investigations','terminal-alerts','terminal-sources'])$(id).replaceChildren();
  $('terminal-provenance').textContent='No private research is retained in this page after the session is locked.';
 }
@@ -353,6 +356,55 @@ function terminalDisplay(data){
   forecasts.append(tr);
  }
  if(!data.predictions.length)terminalEmptyRow(forecasts,4,'No pre-registered forecasts yet.');
+ const daytrade=data.daytrading;
+ const daybody=$('terminal-daytrade-rows');
+ daybody.replaceChildren();
+ if(daytrade){
+   if(daytrade.paper_only!==true||daytrade.broker_connected!==false||
+       daytrade.live_trading_enabled!==false||!Array.isArray(daytrade.trades))
+     throw Error('Unsafe private day-trading snapshot');
+   const summary=daytrade.summary||{};
+   $('terminal-daytrade-count').textContent=String(summary.registered??0);
+   $('terminal-daytrade-observed').textContent=String(summary.observed??0);
+   $('terminal-daytrade-pending').textContent=String(summary.pending??0);
+   const feed=daytrade.feed_health||{};
+   $('terminal-daytrade-health').textContent='Five-minute data · SPY '+String(feed.us_equity_etf||'unavailable')+
+     ' · GLD '+String(feed.gold_etf||'unavailable')+' · Last research update '+terminalDate(daytrade.as_of);
+   const timeLabel=value=>{
+     const parsed=new Date(value);return Number.isNaN(parsed.getTime())?'Unknown':
+       parsed.toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+   };
+   for(const paper of [...daytrade.trades].reverse().slice(0,24)){
+     const tr=document.createElement('tr');
+     terminalTextCell(tr,String(paper.ticker||paper.asset||'unknown'));
+     terminalTextCell(tr,(paper.strategy==='momentum_6'?'Momentum':'Mean reversion')+
+       ' · '+String(paper.direction||'?').toUpperCase());
+     terminalTextCell(tr,timeLabel(paper.created_at));
+     const sl=typeof paper.stop_loss==='number'?paper.stop_loss.toFixed(2):
+       '−'+String(paper.stop_distance_pct??0.5)+'%';
+     const tp=typeof paper.take_profit==='number'?paper.take_profit.toFixed(2):
+       '+'+String(paper.target_distance_pct??1)+'%';
+     terminalTextCell(tr,sl+' / '+tp);
+     let result='Pending · awaiting future completed 5-min bars';
+     if(paper.status==='observed'){
+       const net=paper.net_after_cost_pct;
+       result=String(paper.exit_reason||'paper exit').replaceAll('_',' ')+
+        ' · '+(typeof net==='number'&&Number.isFinite(net)?net.toFixed(2)+'% paper net':'net unavailable')+
+        ' · '+timeLabel(paper.exit_at);
+     }else if(String(paper.status||'').startsWith('blocked_')){
+       result='Not scored · required price candles missing';
+     }
+     terminalTextCell(tr,result);daybody.append(tr);
+   }
+   if(!daytrade.trades.length)terminalEmptyRow(daybody,5,
+     'No intraday entries yet. Signals are registered only during the US regular session, after verified 5-min candles arrive.');
+ }else{
+   $('terminal-daytrade-count').textContent='0';
+   $('terminal-daytrade-observed').textContent='0';
+   $('terminal-daytrade-pending').textContent='0';
+   $('terminal-daytrade-health').textContent='Intraday research is not included in this private snapshot yet.';
+   terminalEmptyRow(daybody,5,'The research feed has not published a five-minute day-trading report.');
+ }
  const review=$('terminal-paper-cases'),performance=data.paper_evaluation||{};
  review.textContent=String(performance.evaluated_hypothetical_cases??0);
  const accuracy=performance.direction_accuracy;
