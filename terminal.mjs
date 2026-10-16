@@ -411,7 +411,8 @@ function terminalDisplay(data){
    $('terminal-daytrade-observed').textContent='0';
    $('terminal-daytrade-pending').textContent='0';
    $('terminal-daytrade-health').textContent='Intraday research is not included in this private snapshot yet.';
-   terminalEmptyRow(daybody,5,'The research feed has not published a five-minute day-trading report.');
+   $('terminal-daytrade-horizon-summary').textContent='No authenticated 5 / 15 / 60-minute results yet.';
+   terminalEmptyRow(daybody,5,'No authenticated intraday paper results have been published yet.');
  }
  const review=$('terminal-paper-cases'),performance=data.paper_evaluation||{};
  review.textContent=String(performance.evaluated_hypothetical_cases??0);
