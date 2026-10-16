@@ -10,6 +10,8 @@ permissions:
   contents: read
 jobs:
   validate:
+    # Match the currently enforced branch-ruleset required check context exactly.
+    name: Teal Frontend JavaScript Smoke / validate
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -43,6 +45,10 @@ jobs:
           assert "teal-terminal" in html
           assert "terminal-market-rows" in html
           assert "terminal-predictions" in html
+          assert 'terminal-daytrading-heading' in html
+          assert 'terminal-daytrade-rows' in html
+          assert "data.daytrading" in js
+          assert "terminalEmptyRow($('terminal-daytrade-rows')" in js
           assert "terminal-paper-cases" in html
           assert "terminal-tradingview" in html
           assert "sandbox=\"allow-scripts allow-popups\"" in html
