@@ -276,6 +276,10 @@ function terminalReset(note='Sign in with 2FA to load private intelligence.'){
  for(const id of ['terminal-daytrade-count','terminal-daytrade-observed','terminal-daytrade-pending'])$(id).textContent='—';
  $('terminal-daytrade-health').textContent='Intraday feed status available after owner MFA.';
  $('terminal-daytrade-horizon-summary').textContent='Timeframe results available after owner MFA.';
+ $('terminal-crypto-health').textContent='Crypto feed status available after owner MFA.';
+ $('terminal-crypto-summary').textContent='Prospective paper records locked.';
+ terminalEmptyRow($('terminal-crypto-rows'),5,'Secured crypto research not loaded.');
+ terminalEmptyRow($('terminal-crypto-leaderboard'),5,'Secured strategy evidence not loaded.');
  $('terminal-performance').textContent='Awaiting evidence';
  terminalEmptyRow($('terminal-market-rows'),4,'Secured market data not loaded.');
  terminalEmptyRow($('terminal-predictions'),4,'Secured predictions not loaded.');
@@ -414,6 +418,44 @@ function terminalDisplay(data){
    $('terminal-daytrade-horizon-summary').textContent='No authenticated 5 / 15 / 60-minute results yet.';
    terminalEmptyRow(daybody,5,'No authenticated intraday paper results have been published yet.');
  }
+ const crypto=data.crypto_research, cryptoBody=$('terminal-crypto-rows'), cryptoRanks=$('terminal-crypto-leaderboard');
+ cryptoBody.replaceChildren();cryptoRanks.replaceChildren();
+ if(crypto){
+   if(crypto.paper_only!==true||crypto.broker_connected!==false||
+      crypto.live_trading_enabled!==false||!Array.isArray(crypto.forecasts)||
+      !Array.isArray(crypto.leaderboard))throw Error('Invalid private crypto payload');
+   const feed=crypto.feed_health||{}, counts=crypto.summary||{};
+   $('terminal-crypto-health').textContent=Object.keys(feed).map(k=>k+': '+String(feed[k])).join(' · ')||'Feed unavailable';
+   $('terminal-crypto-summary').textContent='Registered '+String(counts.registered??0)+
+      ' · Observed '+String(counts.observed??0)+' · Pending '+String(counts.pending??0)+
+      ' · Blocked '+String(counts.blocked??0)+' · Last checked '+terminalDate(crypto.as_of);
+   for(const p of [...crypto.forecasts].reverse().slice(0,24)){
+     const tr=document.createElement('tr');
+     terminalTextCell(tr,p.asset);
+     terminalTextCell(tr,String(p.horizon_minutes)+'m · '+String(p.strategy));
+     terminalTextCell(tr,String(p.direction)+' · '+terminalDate(p.created_at));
+     terminalTextCell(tr,String(p.stop_distance_pct)+'% / '+String(p.target_distance_pct)+'%');
+     terminalTextCell(tr,p.status==='observed'?
+       (Number.isFinite(p.simulated_net_pct)?p.simulated_net_pct.toFixed(3)+'% model net':'Observed, unscored'):
+       String(p.status||'pending'));
+     cryptoBody.append(tr);
+   }
+   for(const e of [...crypto.leaderboard].sort((a,b)=>
+     (b.independent_observations||0)-(a.independent_observations||0)).slice(0,9)){
+     const tr=document.createElement('tr');
+     terminalTextCell(tr,String(e.asset)+' · '+String(e.horizon_minutes)+'m');
+     terminalTextCell(tr,e.strategy);
+     terminalTextCell(tr,e.independent_observations);
+     terminalTextCell(tr,typeof e.net_avg_pct==='number'?e.net_avg_pct.toFixed(3)+'%':'—');
+     terminalTextCell(tr,e.review_eligible===true?'Human review required':'Not qualified');
+     cryptoRanks.append(tr);
+   }
+ }else{
+   $('terminal-crypto-health').textContent='No published crypto feed status.';
+   $('terminal-crypto-summary').textContent='Awaiting verified 24/7 research results.';
+ }
+ if(!cryptoBody.childNodes.length)terminalEmptyRow(cryptoBody,5,'No registered forecasts yet.');
+ if(!cryptoRanks.childNodes.length)terminalEmptyRow(cryptoRanks,5,'No independent strategy evidence yet.');
  const review=$('terminal-paper-cases'),performance=data.paper_evaluation||{};
  review.textContent=String(performance.evaluated_hypothetical_cases??0);
  const accuracy=performance.direction_accuracy;
