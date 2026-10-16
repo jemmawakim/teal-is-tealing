@@ -275,6 +275,7 @@ function terminalReset(note='Sign in with 2FA to load private intelligence.'){
  for(const id of ['terminal-publications','terminal-market-count','terminal-forecast-count','terminal-scored-count','terminal-paper-cases','terminal-accuracy'])$(id).textContent='—';
  for(const id of ['terminal-daytrade-count','terminal-daytrade-observed','terminal-daytrade-pending'])$(id).textContent='—';
  $('terminal-daytrade-health').textContent='Intraday feed status available after owner MFA.';
+ $('terminal-daytrade-horizon-summary').textContent='Timeframe results available after owner MFA.';
  $('terminal-performance').textContent='Awaiting evidence';
  terminalEmptyRow($('terminal-market-rows'),4,'Secured market data not loaded.');
  terminalEmptyRow($('terminal-predictions'),4,'Secured predictions not loaded.');
@@ -368,8 +369,14 @@ function terminalDisplay(data){
    $('terminal-daytrade-observed').textContent=String(summary.observed??0);
    $('terminal-daytrade-pending').textContent=String(summary.pending??0);
    const feed=daytrade.feed_health||{};
-   $('terminal-daytrade-health').textContent='Five-minute data · SPY '+String(feed.us_equity_etf||'unavailable')+
+   $('terminal-daytrade-health').textContent='Five-minute source candles · SPY '+String(feed.us_equity_etf||'unavailable')+
      ' · GLD '+String(feed.gold_etf||'unavailable')+' · Last research update '+terminalDate(daytrade.as_of);
+   const segments=Array.isArray(summary.by_horizon)?summary.by_horizon:[];
+   $('terminal-daytrade-horizon-summary').textContent=segments.length?
+     segments.map(h=>String(h.minutes||'?')+'min: '+String(h.registered??0)+' signals / '+
+       String(h.observed??0)+' scored'+(typeof h.preliminary_net_avg_pct==='number'?
+       ' · '+h.preliminary_net_avg_pct.toFixed(2)+'% paper mean net':'')).join('  |  '):
+     'Five-minute paper model active; 15- and 60-minute experiment status awaiting deployment.';
    const timeLabel=value=>{
      const parsed=new Date(value);return Number.isNaN(parsed.getTime())?'Unknown':
        parsed.toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
@@ -377,7 +384,8 @@ function terminalDisplay(data){
    for(const paper of [...daytrade.trades].reverse().slice(0,24)){
      const tr=document.createElement('tr');
      terminalTextCell(tr,String(paper.ticker||paper.asset||'unknown'));
-     terminalTextCell(tr,(paper.strategy==='momentum_6'?'Momentum':'Mean reversion')+
+     const timeframe=[5,15,60].includes(paper.timeframe_minutes)?paper.timeframe_minutes:5;
+     terminalTextCell(tr,String(timeframe)+'min · '+(paper.strategy==='momentum_6'?'Momentum':'Mean reversion')+
        ' · '+String(paper.direction||'?').toUpperCase());
      terminalTextCell(tr,timeLabel(paper.created_at));
      const sl=typeof paper.stop_loss==='number'?paper.stop_loss.toFixed(2):
@@ -403,7 +411,8 @@ function terminalDisplay(data){
    $('terminal-daytrade-observed').textContent='0';
    $('terminal-daytrade-pending').textContent='0';
    $('terminal-daytrade-health').textContent='Intraday research is not included in this private snapshot yet.';
-   terminalEmptyRow(daybody,5,'The research feed has not published a five-minute day-trading report.');
+   $('terminal-daytrade-horizon-summary').textContent='No authenticated 5 / 15 / 60-minute results yet.';
+   terminalEmptyRow(daybody,5,'No authenticated intraday paper results have been published yet.');
  }
  const review=$('terminal-paper-cases'),performance=data.paper_evaluation||{};
  review.textContent=String(performance.evaluated_hypothetical_cases??0);
