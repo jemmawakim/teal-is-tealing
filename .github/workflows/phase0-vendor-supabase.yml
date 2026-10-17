@@ -34,9 +34,10 @@ jobs:
           const header='// @supabase/supabase-js 2.76.1 | bundled using esbuild 0.25.12\n// SHA-256 of payload excluding these two comment lines: '+hash+'\n';
           writeFileSync(path,header+content.toString('utf8'));
           const final=readFileSync(path,'utf8');
-          if(/^(?:import|export)\s+.*?from\s*['"][^.'"]|import\s*\(['"]https?:/m.test(final))throw Error('Unresolved runtime import');
+          if(!final.includes('createClient'))throw Error('Missing bundled SDK');
           console.log('Vendored payload sha256:',hash);
           JS
+          node --input-type=module -e "import('./vendor/supabase-js-2.76.1.js').then(m => { if(typeof m.createClient !== 'function') process.exit(1); })"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add vendor/supabase-js-2.76.1.js
