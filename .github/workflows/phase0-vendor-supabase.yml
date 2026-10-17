@@ -1,0 +1,44 @@
+name: Phase 0 - vendor pinned Supabase client
+on:
+  push:
+    branches: [security/phase0-local-vendor-20261017]
+    paths: ['.github/workflows/phase0-vendor-supabase.yml']
+permissions:
+  contents: write
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Bundle verified version as one local ES module with no runtime imports
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund @supabase/supabase-js@2.76.1 esbuild@0.25.12
+          printf "export { createClient } from '@supabase/supabase-js';\n" > .teal-vendor-entry.mjs
+          mkdir -p vendor
+          ./node_modules/.bin/esbuild .teal-vendor-entry.mjs --bundle --minify --platform=browser --format=esm --target=es2022 --outfile=vendor/supabase-js-2.76.1.js
+          rm .teal-vendor-entry.mjs
+          node --check vendor/supabase-js-2.76.1.js
+          node --input-type=module - <<'JS'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          import {createHash} from 'node:crypto';
+          const path='vendor/supabase-js-2.76.1.js';
+          const content=readFileSync(path);
+          const hash=createHash('sha256').update(content).digest('hex');
+          const header='// @supabase/supabase-js 2.76.1 | bundled using esbuild 0.25.12\n// SHA-256 of payload excluding these two comment lines: '+hash+'\n';
+          writeFileSync(path,header+content.toString('utf8'));
+          const final=readFileSync(path,'utf8');
+          if(/^(?:import|export)\s+.*?from\s*['"][^.'"]|import\s*\(['"]https?:/m.test(final))throw Error('Unresolved runtime import');
+          console.log('Vendored payload sha256:',hash);
+          JS
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add vendor/supabase-js-2.76.1.js
+          git commit -m "vendor: self-host exact Supabase JS 2.76.1 single-file bundle"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
