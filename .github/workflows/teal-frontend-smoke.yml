@@ -15,10 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22'
+      - name: Reject unpinned GitHub Actions
+        run: |
+          if grep -rnE 'uses: .*@v[0-9]' .github/; then
+            echo 'Unpinned action reference found'; exit 1
+          fi
       - name: Parse dashboard module and assert login wiring
         run: |
           python3 - <<'PY'
@@ -33,10 +38,11 @@ jobs:
           assert "'unsafe-eval'" not in html, 'No eval permitted'
           assert "storage:window.sessionStorage" in js, 'Avoid long-lived browser token storage'
           assert "const SESSION_MS=15*60*1000;" in js, 'Fixed session expiry required'
-          assert '@supabase/supabase-js@2.76.1' in js, 'Pin auth SDK version'
+          assert "from './vendor/supabase-js-2.76.1.js'" in js, 'Pin auth SDK to local bundle'
           assert '@supabase/supabase-js@2/+' not in js, 'Unpinned fallback SDK'
           assert "googleButton.disabled=false" in js
-          assert "cdn.jsdelivr.net" in js
+          assert "esm.sh" not in js and "jsdelivr" not in js
+          assert "esm.sh" not in html and "jsdelivr" not in html
           assert "signInWithOAuth" in js
           assert "loadAutonomy" in js
           assert "loadOwnerTerminal" in js
