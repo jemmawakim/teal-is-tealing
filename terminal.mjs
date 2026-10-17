@@ -1,20 +1,9 @@
+import { createClient } from './vendor/supabase-js-2.76.1.js';
 
 const authStatus=document.getElementById('auth-message');
 const googleButton=document.getElementById('teal-google');
 googleButton.disabled=true;
 authStatus.textContent='Initializing secure Google sign-in…';
-let createClient;
-let authLoadError=null;
-for(const cdn of ['https://esm.sh/@supabase/supabase-js@2.76.1','https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.76.1/+esm']){
- try{
-  const sdk=await import(cdn);
-  if(typeof sdk.createClient==='function'){createClient=sdk.createClient;break;}
- }catch(error){authLoadError=error;}
-}
-if(!createClient){
- authStatus.textContent='Sign-in library failed to load. Check your connection or browser privacy blocking and reload. '+(authLoadError?.message||'');
- throw Error('Supabase authentication SDK unavailable');
-}
 googleButton.disabled=false;
 const sb=createClient('https://tswbkmlaxxnjixjmgqne.supabase.co','sb_publishable_FKJn2ZLv1aTI1WeGVrHi2g_ayQ836SN',{auth:{persistSession:true,storage:window.sessionStorage,autoRefreshToken:true,detectSessionInUrl:false,flowType:'pkce'}});
 const $=id=>document.getElementById(id), message=s=>$('auth-message').textContent=s;

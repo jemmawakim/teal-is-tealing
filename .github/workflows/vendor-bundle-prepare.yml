@@ -1,0 +1,45 @@
+name: Prepare pinned local authentication bundle
+on:
+  push:
+    branches: [phase0/vendor-and-sha-pinning-20261017]
+    paths: ['.github/workflows/vendor-bundle-prepare.yml']
+permissions:
+  contents: write
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Build one pinned, self-contained browser module (no runtime CDN)
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/teal-vendor vendor
+          cd /tmp/teal-vendor
+          npm init -y
+          npm install --ignore-scripts --no-audit --no-fund --save-exact @supabase/supabase-js@2.76.1 esbuild@0.25.12
+          printf 'export { createClient } from "@supabase/supabase-js";\n' > entry.mjs
+          ./node_modules/.bin/esbuild entry.mjs --bundle --platform=browser --format=esm --target=es2020 --minify --outfile="$GITHUB_WORKSPACE/vendor/supabase-js-2.76.1.js"
+          cd "$GITHUB_WORKSPACE"
+          HASH=$(sha256sum vendor/supabase-js-2.76.1.js | cut -d ' ' -f 1)
+          sed -i "1i// SHA-256 (payload excluding this comment): $HASH" vendor/supabase-js-2.76.1.js
+          node --check vendor/supabase-js-2.76.1.js
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          data=Path('vendor/supabase-js-2.76.1.js').read_bytes()
+          header,payload=data.split(b'\n',1)
+          assert hashlib.sha256(payload).hexdigest().encode()==header.split(b': ',1)[1]
+          assert b'from "https:' not in payload and b'import("https:' not in payload
+          print('Self-hosted bundle SHA-256 verified')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add vendor/supabase-js-2.76.1.js
+          git commit -m "vendor: self-host exact Supabase SDK browser bundle"
+          git push origin HEAD:phase0/vendor-and-sha-pinning-20261017
